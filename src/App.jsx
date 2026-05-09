@@ -22,7 +22,6 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [dbError, setDbError] = useState(null)
   const [confirmingReset, setConfirmingReset] = useState(false)
-  const [confirmingNewGame, setConfirmingNewGame] = useState(false)
   const [chatName, setChatName] = useState(() => localStorage.getItem('chat_name'))
   const [isAdmin, setIsAdmin] = useState(() => localStorage.getItem('admin_unlocked') === '1')
   const [showAdminPrompt, setShowAdminPrompt] = useState(false)
@@ -124,17 +123,6 @@ export default function App() {
     const error = await persistAs(patch)
     if (error) { setDbError(`Reset failed: ${error.message}`); fetchGame() }
   }, [game.quarter, chatName, fetchGame, persistAs])
-
-  const startNewGame = useCallback(async () => {
-    const patch = { seahawks_score: 0, opponent_score: 0, quarter: 1 }
-    setConfirmingNewGame(false)
-    setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
-    const [scoreError] = await Promise.all([
-      persistAs(patch),
-      supabase.from('chat_messages').delete().gte('id', 0),
-    ])
-    if (scoreError) { setDbError(`New game failed: ${scoreError.message}`); fetchGame() }
-  }, [chatName, fetchGame, persistAs])
 
   useEffect(() => {
     fetchGame()
@@ -243,19 +231,6 @@ export default function App() {
               </button>
             )}
 
-            {isAdmin && (
-              confirmingNewGame ? (
-                <div className="reset-confirm">
-                  <span className="reset-confirm-label">Reset scores, Q1 &amp; clear chat?</span>
-                  <button className="btn btn-newgame-confirm" onClick={startNewGame}>Yes, new game</button>
-                  <button className="btn btn-reset-cancel" onClick={() => setConfirmingNewGame(false)}>Cancel</button>
-                </div>
-              ) : (
-                <button className="btn btn-newgame" onClick={() => setConfirmingNewGame(true)}>
-                  ★ New Game
-                </button>
-              )
-            )}
           </section>
 
           <Moments />
