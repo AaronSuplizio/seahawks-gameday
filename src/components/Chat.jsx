@@ -73,6 +73,11 @@ export default function Chat({ name, onChangeName }) {
           setTimeout(scrollToBottom, 50)
         }
       )
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'chat_messages' },
+        (payload) => {
+          setMessages(prev => prev.filter(m => m.id !== payload.old.id))
+        }
+      )
       .subscribe()
 
     return () => { supabase.removeChannel(channel) }
@@ -106,6 +111,14 @@ export default function Chat({ name, onChangeName }) {
     setSending(false)
   }
 
+  async function deleteMessage(id) {
+    setMessages(prev => prev.filter(m => m.id !== id))
+    await supabase.from('chat_messages').delete().eq('id', id)
+  }
+
+  // Only the most recent real (non-temp) message from this user is deletable
+  const myLastId = [...messages].reverse().find(m => m.name === name && typeof m.id === 'number')?.id
+
   return (
     <div className="chat">
       <div className="chat-header">
@@ -124,6 +137,11 @@ export default function Chat({ name, onChangeName }) {
             <div className="chat-msg-meta">
               <span className="chat-msg-name">{msg.name}</span>
               <span className="chat-msg-time">{formatAge(msg.created_at)}</span>
+              {msg.id === myLastId && (
+                <button className="chat-delete-btn" onClick={() => deleteMessage(msg.id)} title="Delete message">
+                  ✕
+                </button>
+              )}
             </div>
             <div className="chat-msg-bubble">{msg.message}</div>
           </div>
