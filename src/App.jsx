@@ -130,19 +130,22 @@ export default function App() {
         />
 
         <section className="controls-section">
-          <div className="score-controls-row">
-            <div className="team-controls">
-              <div className="team-controls-label seahawks-label">SEAHAWKS</div>
+          <div className="team-cards">
+            <div className="team-card">
+              <div className="team-card-name seahawks-label">SEAHAWKS</div>
               <ScoreControls team="seahawks" onAdjust={adjustScore} />
             </div>
-            <div className="controls-divider" />
-            <div className="team-controls">
-              <div className="team-controls-label opponent-label">OPPONENT</div>
+            <div className="team-card-divider" />
+            <div className="team-card">
+              <div className="team-card-name opponent-label">OPPONENT</div>
               <ScoreControls team="opponent" onAdjust={adjustScore} />
             </div>
           </div>
 
-          <QuarterControls quarter={game.quarter} onSetQuarter={setQuarter} />
+          <div className="quarter-card">
+            <div className="quarter-card-label">QUARTER</div>
+            <QuarterControls quarter={game.quarter} onSetQuarter={setQuarter} />
+          </div>
 
           {confirmingReset ? (
             <div className="reset-confirm">

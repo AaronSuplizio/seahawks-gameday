@@ -1,21 +1,21 @@
 const BUTTONS = [
-  { label: '+6', delta: 6, title: 'Touchdown' },
-  { label: '+1', delta: 1, title: 'PAT / Extra Point' },
-  { label: '+2', delta: 2, title: '2-Point Conversion' },
-  { label: '−1', delta: -1, title: 'Undo / Correct Score', undo: true },
+  { label: '+6', sub: 'TD',   delta: 6 },
+  { label: '+1', sub: 'PAT',  delta: 1 },
+  { label: '+2', sub: '2PT',  delta: 2 },
+  { label: '−1', sub: 'UNDO', delta: -1, undo: true },
 ]
 
 export default function ScoreControls({ team, onAdjust }) {
   return (
     <div className="score-buttons">
-      {BUTTONS.map(({ label, delta, title, undo }) => (
+      {BUTTONS.map(({ label, sub, delta, undo }) => (
         <button
           key={label}
           className={`btn ${undo ? 'btn-undo' : 'btn-score'}`}
           onClick={() => onAdjust(team, delta)}
-          title={title}
         >
-          {label}
+          <span className="score-btn-value">{label}</span>
+          <span className="score-btn-sub">{sub}</span>
         </button>
       ))}
     </div>

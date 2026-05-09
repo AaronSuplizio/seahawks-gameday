@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 
 function useSecondsSince(isoString) {
   const [seconds, setSeconds] = useState(null)
-
   useEffect(() => {
     if (!isoString) return
     const tick = () => setSeconds(Math.floor((Date.now() - new Date(isoString).getTime()) / 1000))
@@ -10,7 +9,6 @@ function useSecondsSince(isoString) {
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
   }, [isoString])
-
   return seconds
 }
 
@@ -31,11 +29,9 @@ export default function StatusBar({ connected, updatedAt, onRefresh }) {
       <div className="status-left">
         <span className={`connection-dot ${connected ? 'dot-connected' : 'dot-disconnected'}`} />
         <span className="connection-label">{connected ? 'Live' : 'Offline'}</span>
-        {age && <span className="last-updated">· {age}</span>}
+        {age && <span className="last-updated">· Last updated {age}</span>}
       </div>
-      <button className="btn btn-refresh" onClick={onRefresh} title="Refresh score from server">
-        ↻ Refresh
-      </button>
+      <button className="btn btn-refresh" onClick={onRefresh}>↻ Refresh</button>
     </div>
   )
 }
