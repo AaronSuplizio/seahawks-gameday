@@ -1,7 +1,6 @@
 const BUTTONS = [
   { label: '+6', sub: 'TD',   delta: 6 },
   { label: '+1', sub: 'PAT',  delta: 1 },
-  { label: '+2', sub: '2PT',  delta: 2 },
   { label: '−1', sub: 'UNDO', delta: -1, undo: true },
 ]
 

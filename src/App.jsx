@@ -5,6 +5,7 @@ import ScoreControls from './components/ScoreControls'
 import QuarterControls from './components/QuarterControls'
 import StatusBar from './components/StatusBar'
 import Chat, { JoinPrompt } from './components/Chat'
+import Moments from './components/Moments'
 
 const DEFAULT_GAME = { id: 1, seahawks_score: 0, opponent_score: 0, quarter: 1, updated_at: null }
 
@@ -159,6 +160,8 @@ export default function App() {
             </button>
           )}
         </section>
+
+        <Moments />
 
         <section className="chat-section">
           {chatName ? (
