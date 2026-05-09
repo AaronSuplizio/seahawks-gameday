@@ -9,10 +9,10 @@ import Moments from './components/Moments'
 
 const DEFAULT_GAME = { id: 1, seahawks_score: 0, opponent_score: 0, quarter: 1, updated_at: null }
 
-async function persist(patch) {
+async function persist(patch, updatedBy = null) {
   const { error } = await supabase
     .from('game_state')
-    .upsert({ id: 1, ...patch, updated_at: new Date().toISOString() })
+    .upsert({ id: 1, ...patch, updated_at: new Date().toISOString(), updated_by: updatedBy })
   return error
 }
 
@@ -53,6 +53,8 @@ export default function App() {
     }
   }, [fetchGame])
 
+  const persistAs = useCallback((patch) => persist(patch, chatName), [chatName])
+
   const adjustScore = useCallback((team, delta) => {
     const key = team === 'seahawks' ? 'seahawks_score' : 'opponent_score'
     const current = team === 'seahawks' ? game.seahawks_score : game.opponent_score
@@ -63,28 +65,28 @@ export default function App() {
       quarter: game.quarter,
       [key]: newValue,
     }
-    setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString() }))
-    persist(patch).then(err => {
+    setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
+    persistAs(patch).then(err => {
       if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() }
     })
-  }, [game, fetchGame])
+  }, [game, chatName, fetchGame, persistAs])
 
   const setQuarter = useCallback((q) => {
     const quarter = Math.min(4, Math.max(1, q))
     const patch = { seahawks_score: game.seahawks_score, opponent_score: game.opponent_score, quarter }
-    setGame(prev => ({ ...prev, quarter, updated_at: new Date().toISOString() }))
-    persist(patch).then(err => {
+    setGame(prev => ({ ...prev, quarter, updated_at: new Date().toISOString(), updated_by: chatName }))
+    persistAs(patch).then(err => {
       if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() }
     })
-  }, [game, fetchGame])
+  }, [game, chatName, fetchGame, persistAs])
 
   const resetGame = useCallback(async () => {
-    const patch = { seahawks_score: 0, opponent_score: 0 }
+    const patch = { seahawks_score: 0, opponent_score: 0, quarter: game.quarter }
     setConfirmingReset(false)
-    setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString() }))
-    const error = await persist({ ...patch, quarter: game.quarter })
+    setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
+    const error = await persistAs(patch)
     if (error) { setDbError(`Reset failed: ${error.message}`); fetchGame() }
-  }, [game.quarter, fetchGame])
+  }, [game.quarter, chatName, fetchGame, persistAs])
 
   useEffect(() => {
     fetchGame()
@@ -114,7 +116,7 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <h1 className="app-title">Seahawks Gameday</h1>
-        <StatusBar connected={connected} updatedAt={game.updated_at} onRefresh={fetchGame} />
+        <StatusBar connected={connected} updatedAt={game.updated_at} updatedBy={game.updated_by} onRefresh={fetchGame} />
       </header>
 
       {dbError && (
@@ -131,8 +133,8 @@ export default function App() {
           onSetScore={(team, value) => {
             const key = team === 'seahawks' ? 'seahawks_score' : 'opponent_score'
             const patch = { seahawks_score: game.seahawks_score, opponent_score: game.opponent_score, quarter: game.quarter, [key]: value }
-            setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString() }))
-            persist(patch).then(err => { if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() } })
+            setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
+            persistAs(patch).then(err => { if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() } })
           }}
         />
 

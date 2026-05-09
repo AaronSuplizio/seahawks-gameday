@@ -20,16 +20,22 @@ function formatAge(s) {
   return `${Math.floor(s / 3600)}h ago`
 }
 
-export default function StatusBar({ connected, updatedAt, onRefresh }) {
+export default function StatusBar({ connected, updatedAt, updatedBy, onRefresh }) {
   const seconds = useSecondsSince(updatedAt)
   const age = formatAge(seconds)
+
+  const updatedMsg = age
+    ? updatedBy
+      ? `· Last updated by ${updatedBy} ${age}`
+      : `· Last updated ${age}`
+    : null
 
   return (
     <div className="status-bar">
       <div className="status-left">
         <span className={`connection-dot ${connected ? 'dot-connected' : 'dot-disconnected'}`} />
         <span className="connection-label">{connected ? 'Live' : 'Offline'}</span>
-        {age && <span className="last-updated">· Last updated {age}</span>}
+        {updatedMsg && <span className="last-updated">{updatedMsg}</span>}
       </div>
       <button className="btn btn-refresh" onClick={onRefresh}>↻ Refresh</button>
     </div>
