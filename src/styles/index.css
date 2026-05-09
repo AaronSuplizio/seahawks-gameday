@@ -356,6 +356,37 @@ body {
   margin-top: auto;
 }
 
+/* Reset confirm row */
+.reset-confirm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.reset-confirm-label {
+  flex: 1;
+  font-size: 0.85rem;
+  color: #fca5a5;
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+}
+
+.btn-reset-confirm {
+  background: #b91c1c;
+  color: var(--white);
+  font-size: 0.85rem;
+  padding: 10px 14px;
+}
+
+.btn-reset-cancel {
+  background: rgba(255,255,255,0.08);
+  color: var(--gray);
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
 /* Refresh */
 .btn-refresh {
   background: transparent;

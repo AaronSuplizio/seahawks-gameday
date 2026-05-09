@@ -19,6 +19,7 @@ export default function App() {
   const [connected, setConnected] = useState(false)
   const [loading, setLoading] = useState(true)
   const [dbError, setDbError] = useState(null)
+  const [confirmingReset, setConfirmingReset] = useState(false)
 
   const fetchGame = useCallback(async () => {
     const { data, error: fetchErr } = await supabase
@@ -51,31 +52,32 @@ export default function App() {
 
   const adjustScore = useCallback((team, delta) => {
     const key = team === 'seahawks' ? 'seahawks_score' : 'opponent_score'
-    setGame(prev => {
-      const newValue = Math.max(0, prev[key] + delta)
-      const patch = { seahawks_score: prev.seahawks_score, opponent_score: prev.opponent_score, quarter: prev.quarter, [key]: newValue }
-      persist(patch).then(err => {
-        if (err) {
-          setDbError(`Save failed: ${err.message}`)
-          fetchGame()
-        }
-      })
-      return { ...prev, ...patch, updated_at: new Date().toISOString() }
+    const current = team === 'seahawks' ? game.seahawks_score : game.opponent_score
+    const newValue = Math.max(0, current + delta)
+    const patch = {
+      seahawks_score: game.seahawks_score,
+      opponent_score: game.opponent_score,
+      quarter: game.quarter,
+      [key]: newValue,
+    }
+    setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString() }))
+    persist(patch).then(err => {
+      if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() }
     })
-  }, [fetchGame])
+  }, [game, fetchGame])
 
   const setQuarter = useCallback((q) => {
     const quarter = Math.min(4, Math.max(1, q))
-    setGame(prev => {
-      persist({ seahawks_score: prev.seahawks_score, opponent_score: prev.opponent_score, quarter })
-        .then(err => { if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() } })
-      return { ...prev, quarter, updated_at: new Date().toISOString() }
+    const patch = { seahawks_score: game.seahawks_score, opponent_score: game.opponent_score, quarter }
+    setGame(prev => ({ ...prev, quarter, updated_at: new Date().toISOString() }))
+    persist(patch).then(err => {
+      if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() }
     })
-  }, [fetchGame])
+  }, [game, fetchGame])
 
   const resetGame = useCallback(async () => {
-    if (!window.confirm('Reset the game? This will zero out all scores and return to Q1.')) return
     const patch = { seahawks_score: 0, opponent_score: 0, quarter: 1 }
+    setConfirmingReset(false)
     setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString() }))
     const error = await persist(patch)
     if (error) { setDbError(`Reset failed: ${error.message}`); fetchGame() }
@@ -140,9 +142,17 @@ export default function App() {
 
           <QuarterControls quarter={game.quarter} onSetQuarter={setQuarter} />
 
-          <button className="btn btn-reset" onClick={resetGame}>
-            Reset Game
-          </button>
+          {confirmingReset ? (
+            <div className="reset-confirm">
+              <span className="reset-confirm-label">Reset everything?</span>
+              <button className="btn btn-reset-confirm" onClick={resetGame}>Yes, reset</button>
+              <button className="btn btn-reset-cancel" onClick={() => setConfirmingReset(false)}>Cancel</button>
+            </div>
+          ) : (
+            <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>
+              Reset Game
+            </button>
+          )}
         </section>
       </main>
     </div>
