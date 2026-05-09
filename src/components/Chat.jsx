@@ -44,6 +44,7 @@ export default function Chat({ name, onChangeName }) {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState(null)
   const bottomRef = useRef(null)
 
   const scrollToBottom = useCallback(() => {
@@ -97,7 +98,9 @@ export default function Chat({ name, onChangeName }) {
 
     if (error) {
       setMessages(prev => prev.filter(m => m.id !== tempId))
+      setSendError(`Send failed: ${error.message}`)
     } else if (data) {
+      setSendError(null)
       setMessages(prev => prev.map(m => m.id === tempId ? data : m))
     }
     setSending(false)
@@ -127,6 +130,8 @@ export default function Chat({ name, onChangeName }) {
         ))}
         <div ref={bottomRef} />
       </div>
+
+      {sendError && <div className="chat-error">{sendError}</div>}
 
       <form className="chat-input-row" onSubmit={sendMessage}>
         <input

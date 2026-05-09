@@ -556,6 +556,14 @@ body {
   border-radius: 12px 12px 3px 12px;
 }
 
+.chat-error {
+  background: #7f1d1d;
+  color: #fca5a5;
+  font-size: 0.78rem;
+  padding: 6px 14px;
+  border-top: 1px solid #b91c1c;
+}
+
 .chat-input-row {
   display: flex;
   gap: 8px;
