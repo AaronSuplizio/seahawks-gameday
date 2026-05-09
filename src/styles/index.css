@@ -78,6 +78,7 @@ body {
 /* ── Header ──────────────────────────────────────────────────────── */
 .app-header {
   padding: 14px 18px 12px;
+  padding-top: max(14px, calc(env(safe-area-inset-top) + 8px));
   background: var(--navy);
   border-bottom: 2px solid var(--green);
 }
@@ -870,6 +871,7 @@ body {
   display: flex;
   gap: 8px;
   padding: 10px 14px;
+  padding-bottom: max(10px, calc(env(safe-area-inset-bottom) + 6px));
   border-top: 1px solid var(--border);
   flex-shrink: 0;
 }
