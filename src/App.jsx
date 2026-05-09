@@ -126,61 +126,65 @@ export default function App() {
       )}
 
       <main className="app-main">
-        <Scoreboard
-          seahawksScore={game.seahawks_score}
-          opponentScore={game.opponent_score}
-          quarter={game.quarter}
-          onSetScore={(team, value) => {
-            const key = team === 'seahawks' ? 'seahawks_score' : 'opponent_score'
-            const patch = { seahawks_score: game.seahawks_score, opponent_score: game.opponent_score, quarter: game.quarter, [key]: value }
-            setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
-            persistAs(patch).then(err => { if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() } })
-          }}
-        />
+        <div className="main-left">
+          <Scoreboard
+            seahawksScore={game.seahawks_score}
+            opponentScore={game.opponent_score}
+            quarter={game.quarter}
+            onSetScore={(team, value) => {
+              const key = team === 'seahawks' ? 'seahawks_score' : 'opponent_score'
+              const patch = { seahawks_score: game.seahawks_score, opponent_score: game.opponent_score, quarter: game.quarter, [key]: value }
+              setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
+              persistAs(patch).then(err => { if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() } })
+            }}
+          />
 
-        <section className="controls-section">
-          <div className="team-cards">
-            <div className="team-card">
-              <div className="team-card-name seahawks-label">SEAHAWKS</div>
-              <ScoreControls team="seahawks" onAdjust={adjustScore} />
+          <section className="controls-section">
+            <div className="team-cards">
+              <div className="team-card">
+                <div className="team-card-name seahawks-label">SEAHAWKS</div>
+                <ScoreControls team="seahawks" onAdjust={adjustScore} />
+              </div>
+              <div className="team-card-divider" />
+              <div className="team-card">
+                <div className="team-card-name opponent-label">OPPONENT</div>
+                <ScoreControls team="opponent" onAdjust={adjustScore} />
+              </div>
             </div>
-            <div className="team-card-divider" />
-            <div className="team-card">
-              <div className="team-card-name opponent-label">OPPONENT</div>
-              <ScoreControls team="opponent" onAdjust={adjustScore} />
+
+            <div className="quarter-card">
+              <div className="quarter-card-label">QUARTER</div>
+              <QuarterControls quarter={game.quarter} onSetQuarter={setQuarter} />
             </div>
-          </div>
 
-          <div className="quarter-card">
-            <div className="quarter-card-label">QUARTER</div>
-            <QuarterControls quarter={game.quarter} onSetQuarter={setQuarter} />
-          </div>
+            {confirmingReset ? (
+              <div className="reset-confirm">
+                <span className="reset-confirm-label">Zero out scores?</span>
+                <button className="btn btn-reset-confirm" onClick={resetGame}>Yes, reset</button>
+                <button className="btn btn-reset-cancel" onClick={() => setConfirmingReset(false)}>Cancel</button>
+              </div>
+            ) : (
+              <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>
+                Reset Score
+              </button>
+            )}
+          </section>
 
-          {confirmingReset ? (
-            <div className="reset-confirm">
-              <span className="reset-confirm-label">Zero out scores?</span>
-              <button className="btn btn-reset-confirm" onClick={resetGame}>Yes, reset</button>
-              <button className="btn btn-reset-cancel" onClick={() => setConfirmingReset(false)}>Cancel</button>
-            </div>
-          ) : (
-            <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>
-              Reset Score
-            </button>
-          )}
-        </section>
+          <Moments />
+        </div>
 
-        <Moments />
-
-        <section className="chat-section">
-          {chatName ? (
-            <Chat
-              name={chatName}
-              onChangeName={() => { localStorage.removeItem('chat_name'); setChatName(null) }}
-            />
-          ) : (
-            <JoinPrompt onJoin={name => { localStorage.setItem('chat_name', name); setChatName(name) }} />
-          )}
-        </section>
+        <div className="main-right">
+          <section className="chat-section">
+            {chatName ? (
+              <Chat
+                name={chatName}
+                onChangeName={() => { localStorage.removeItem('chat_name'); setChatName(null) }}
+              />
+            ) : (
+              <JoinPrompt onJoin={name => { localStorage.setItem('chat_name', name); setChatName(name) }} />
+            )}
+          </section>
+        </div>
       </main>
     </div>
   )

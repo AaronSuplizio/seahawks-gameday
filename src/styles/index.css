@@ -72,8 +72,6 @@ body {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  max-width: 480px;
-  margin: 0 auto;
   background: var(--navy);
 }
 
@@ -118,7 +116,13 @@ body {
 .last-updated     { color: var(--gray); }
 
 /* ── Main ────────────────────────────────────────────────────────── */
-.app-main { flex: 1; display: flex; flex-direction: column; }
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.main-left  { display: flex; flex-direction: column; }
+.main-right { display: flex; flex-direction: column; }
 
 /* ── Scoreboard ──────────────────────────────────────────────────── */
 .scoreboard {
@@ -621,7 +625,7 @@ body {
   border-radius: var(--radius-sm);
   color: var(--white);
   font-family: var(--font-ui);
-  font-size: 0.95rem;
+  font-size: 1rem;
   padding: 10px 12px;
   outline: none;
 }
@@ -752,7 +756,7 @@ body {
   border-radius: var(--radius-sm);
   color: var(--white);
   font-family: var(--font-ui);
-  font-size: 0.9rem;
+  font-size: 1rem;
   padding: 9px 12px;
   outline: none;
 }
@@ -774,12 +778,67 @@ body {
 }
 .btn-send:disabled { opacity: 0.35; }
 
-/* ── Wider screens ───────────────────────────────────────────────── */
-@media (min-width: 480px) {
+/* ── Tablet / desktop layout ─────────────────────────────────────── */
+@media (min-width: 720px) {
   body { background: #000d1a; }
+
   .app {
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100svh;
+    height: 100svh;
     border-left:  1px solid var(--border);
     border-right: 1px solid var(--border);
-    box-shadow: 0 0 80px rgba(0,0,0,0.6);
+    box-shadow: 0 0 80px rgba(0,0,0,0.5);
   }
+
+  /* Header: title and status on one line */
+  .app-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 24px;
+  }
+  .app-title { margin-bottom: 0; font-size: 1.4rem; }
+  .status-bar { flex: 1; }
+
+  /* Two-column main */
+  .app-main {
+    flex: 1;
+    flex-direction: row;
+    overflow: hidden;
+  }
+
+  .main-left {
+    width: 420px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+  }
+
+  .main-right {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* Scoreboard gets a bit more breathing room */
+  .scoreboard { padding: 32px 28px 36px; }
+  .score-number { font-size: clamp(5rem, 9vw, 8rem); }
+
+  /* Chat fills the full right column */
+  .chat-section {
+    border-top: none;
+    border-left: none;
+    height: 100%;
+    min-height: 0;
+  }
+  .chat { height: 100%; }
+  .chat-messages { flex: 1; min-height: 0; }
+
+  /* Join prompt fills column */
+  .chat-join { height: 100%; justify-content: center; }
+
+  /* Moments row on desktop */
+  .moments-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
