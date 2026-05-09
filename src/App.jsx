@@ -4,6 +4,7 @@ import Scoreboard from './components/Scoreboard'
 import ScoreControls from './components/ScoreControls'
 import QuarterControls from './components/QuarterControls'
 import StatusBar from './components/StatusBar'
+import Chat, { JoinPrompt } from './components/Chat'
 
 const DEFAULT_GAME = { id: 1, seahawks_score: 0, opponent_score: 0, quarter: 1, updated_at: null }
 
@@ -20,6 +21,7 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [dbError, setDbError] = useState(null)
   const [confirmingReset, setConfirmingReset] = useState(false)
+  const [chatName, setChatName] = useState(() => localStorage.getItem('chat_name'))
 
   const fetchGame = useCallback(async () => {
     const { data, error: fetchErr } = await supabase
@@ -152,6 +154,17 @@ export default function App() {
             <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>
               Reset Game
             </button>
+          )}
+        </section>
+
+        <section className="chat-section">
+          {chatName ? (
+            <Chat
+              name={chatName}
+              onChangeName={() => { localStorage.removeItem('chat_name'); setChatName(null) }}
+            />
+          ) : (
+            <JoinPrompt onJoin={name => { localStorage.setItem('chat_name', name); setChatName(name) }} />
           )}
         </section>
       </main>
