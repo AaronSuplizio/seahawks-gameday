@@ -116,8 +116,11 @@ export default function Chat({ name, onChangeName }) {
     await supabase.from('chat_messages').delete().eq('id', id)
   }
 
-  // Only the most recent real (non-temp) message from this user is deletable
-  const myLastId = [...messages].reverse().find(m => m.name === name && typeof m.id === 'number')?.id
+  const [activeMsgId, setActiveMsgId] = useState(null)
+
+  function toggleActive(msgId) {
+    setActiveMsgId(prev => prev === msgId ? null : msgId)
+  }
 
   return (
     <div className="chat">
@@ -132,20 +135,31 @@ export default function Chat({ name, onChangeName }) {
         {messages.length === 0 && (
           <p className="chat-empty">No messages yet — say something! 👋</p>
         )}
-        {messages.map(msg => (
-          <div key={msg.id} className={`chat-msg ${msg.name === name ? 'chat-msg-mine' : ''}`}>
-            <div className="chat-msg-meta">
-              <span className="chat-msg-name">{msg.name}</span>
-              <span className="chat-msg-time">{formatAge(msg.created_at)}</span>
-              {msg.id === myLastId && (
-                <button className="chat-delete-btn" onClick={() => deleteMessage(msg.id)} title="Delete message">
+        {messages.map(msg => {
+          const isMyMsg = msg.name === name && typeof msg.id === 'number'
+          const isActive = msg.id === activeMsgId
+          return (
+            <div
+              key={msg.id}
+              className={`chat-msg ${isMyMsg ? 'chat-msg-mine' : ''} ${isActive ? 'chat-msg-active' : ''}`}
+              onClick={isMyMsg ? () => toggleActive(msg.id) : undefined}
+            >
+              <div className="chat-msg-meta">
+                <span className="chat-msg-name">{msg.name}</span>
+                <span className="chat-msg-time">{formatAge(msg.created_at)}</span>
+              </div>
+              <div className="chat-msg-bubble">{msg.message}</div>
+              {isMyMsg && (
+                <button
+                  className="chat-delete-btn"
+                  onClick={e => { e.stopPropagation(); deleteMessage(msg.id) }}
+                >
                   Unsend
                 </button>
               )}
             </div>
-            <div className="chat-msg-bubble">{msg.message}</div>
-          </div>
-        ))}
+          )
+        })}
         <div ref={bottomRef} />
       </div>
 

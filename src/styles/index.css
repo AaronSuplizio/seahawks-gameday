@@ -520,18 +520,22 @@ body {
 .chat-msg-name { font-size: 0.7rem; font-weight: 600; color: var(--green); }
 .chat-msg-time { font-size: 0.66rem; color: var(--gray); }
 .chat-delete-btn {
+  display: none;
   background: none;
   border: none;
   color: #ff4444;
   font-size: 0.72rem;
   font-weight: 700;
   cursor: pointer;
-  padding: 6px 10px;
-  margin: -6px -4px;
+  padding: 3px 0 0;
   line-height: 1;
+  align-self: flex-end;
   -webkit-tap-highlight-color: transparent;
 }
 .chat-delete-btn:active { opacity: 0.6; }
+
+.chat-msg-mine:hover .chat-delete-btn,
+.chat-msg-mine.chat-msg-active .chat-delete-btn { display: block; }
 .chat-msg-bubble {
   background: rgba(255,255,255,0.08);
   border-radius: 12px 12px 12px 3px;
