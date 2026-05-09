@@ -128,6 +128,12 @@ export default function App() {
           seahawksScore={game.seahawks_score}
           opponentScore={game.opponent_score}
           quarter={game.quarter}
+          onSetScore={(team, value) => {
+            const key = team === 'seahawks' ? 'seahawks_score' : 'opponent_score'
+            const patch = { seahawks_score: game.seahawks_score, opponent_score: game.opponent_score, quarter: game.quarter, [key]: value }
+            setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString() }))
+            persist(patch).then(err => { if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() } })
+          }}
         />
 
         <section className="controls-section">

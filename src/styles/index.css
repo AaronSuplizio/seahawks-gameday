@@ -157,6 +157,9 @@ body {
   display: block;
 }
 
+.score-tappable { cursor: pointer; }
+.score-tappable:active { opacity: 0.7; }
+
 @keyframes scoreFlash {
   0%   { text-shadow: none; color: var(--white); }
   30%  { text-shadow: 0 0 40px var(--green), 0 0 80px var(--green); color: var(--green); }
@@ -187,6 +190,82 @@ body {
   color: rgba(255,255,255,0.2);
   line-height: 1;
   margin-top: 4px;
+}
+
+/* ── Score edit modal ────────────────────────────────────────────── */
+.score-edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: 24px;
+}
+.score-edit-card {
+  background: var(--navy-mid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px 20px;
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.score-edit-title {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+  text-align: center;
+}
+.score-edit-input {
+  background: var(--gray-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 12px;
+  outline: none;
+  width: 100%;
+  -moz-appearance: textfield;
+}
+.score-edit-input::-webkit-outer-spin-button,
+.score-edit-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.score-edit-input:focus { border-color: var(--green); }
+.score-edit-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.score-edit-cancel {
+  background: var(--gray-dim);
+  color: var(--gray);
+  font-size: 0.9rem;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  cursor: pointer;
+}
+.score-edit-confirm {
+  background: var(--green);
+  color: var(--navy);
+  font-size: 0.9rem;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 700;
+  cursor: pointer;
 }
 
 /* ── Controls section ────────────────────────────────────────────── */
