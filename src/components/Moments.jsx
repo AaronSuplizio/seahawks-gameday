@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { supabase } from '../supabaseClient'
 
 const MOMENTS = [
@@ -55,13 +56,14 @@ export default function Moments() {
         </div>
       </section>
 
-      {active && (
+      {active && createPortal(
         <div className="moment-overlay" key={active.key} style={{ '--mc': active.color }}>
           <div className="moment-overlay-content">
             <div className="moment-overlay-emoji">{active.emoji}</div>
             <div className="moment-overlay-text">{active.label}</div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )
