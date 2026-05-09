@@ -24,6 +24,18 @@ export default function App() {
   const [confirmingReset, setConfirmingReset] = useState(false)
   const [chatName, setChatName] = useState(() => localStorage.getItem('chat_name'))
   const [isAdmin, setIsAdmin] = useState(() => localStorage.getItem('admin_unlocked') === '1')
+  const [shareCopied, setShareCopied] = useState(false)
+
+  async function shareApp() {
+    const url = window.location.href
+    if (navigator.share) {
+      navigator.share({ title: 'Seahawks Scoreboard', text: 'Follow the game live! 🏈', url })
+    } else {
+      await navigator.clipboard.writeText(url)
+      setShareCopied(true)
+      setTimeout(() => setShareCopied(false), 2000)
+    }
+  }
   const [showAdminPrompt, setShowAdminPrompt] = useState(false)
   const [adminInput, setAdminInput] = useState('')
   const [adminError, setAdminError] = useState(false)
@@ -154,7 +166,14 @@ export default function App() {
         <h1 className="app-title" onClick={handleTitleTap} style={{ cursor: 'default', userSelect: 'none' }}>
           Seahawks Scoreboard{isAdmin && <span className="admin-badge">ADMIN</span>}
         </h1>
-        <StatusBar connected={connected} updatedAt={game.updated_at} updatedBy={game.updated_by} onRefresh={fetchGame} />
+        <StatusBar
+          connected={connected}
+          updatedAt={game.updated_at}
+          updatedBy={game.updated_by}
+          onRefresh={fetchGame}
+          onShare={shareApp}
+          shareCopied={shareCopied}
+        />
       </header>
 
       {dbError && (

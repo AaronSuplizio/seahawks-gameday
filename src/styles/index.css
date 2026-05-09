@@ -514,6 +514,29 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+.btn-share {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--gray);
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-share:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
+.share-copied {
+  font-size: 0.7rem;
+  font-family: var(--font-ui);
+  color: var(--green);
+  white-space: nowrap;
+  padding: 0 2px;
+}
+
 /* ── Moments section ─────────────────────────────────────────────── */
 .moments-section {
   padding: 12px 14px 14px;
