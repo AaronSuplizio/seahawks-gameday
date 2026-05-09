@@ -164,7 +164,7 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <h1 className="app-title" onClick={handleTitleTap} style={{ cursor: 'default', userSelect: 'none' }}>
-          Seahawks Gameday{isAdmin && <span className="admin-badge">ADMIN</span>}
+          Seahawks Scoreboard{isAdmin && <span className="admin-badge">ADMIN</span>}
         </h1>
         <StatusBar connected={connected} updatedAt={game.updated_at} updatedBy={game.updated_by} onRefresh={fetchGame} />
       </header>
