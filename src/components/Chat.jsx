@@ -139,7 +139,7 @@ export default function Chat({ name, onChangeName }) {
               <span className="chat-msg-time">{formatAge(msg.created_at)}</span>
               {msg.id === myLastId && (
                 <button className="chat-delete-btn" onClick={() => deleteMessage(msg.id)} title="Delete message">
-                  ✕
+                  Unsend
                 </button>
               )}
             </div>
