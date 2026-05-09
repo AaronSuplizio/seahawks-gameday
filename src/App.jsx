@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from './supabaseClient'
 import Scoreboard from './components/Scoreboard'
 import ScoreControls from './components/ScoreControls'
@@ -22,7 +22,44 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [dbError, setDbError] = useState(null)
   const [confirmingReset, setConfirmingReset] = useState(false)
+  const [confirmingNewGame, setConfirmingNewGame] = useState(false)
   const [chatName, setChatName] = useState(() => localStorage.getItem('chat_name'))
+  const [isAdmin, setIsAdmin] = useState(() => localStorage.getItem('admin_unlocked') === '1')
+  const [showAdminPrompt, setShowAdminPrompt] = useState(false)
+  const [adminInput, setAdminInput] = useState('')
+  const [adminError, setAdminError] = useState(false)
+  const tapCountRef = useRef(0)
+  const tapTimerRef = useRef(null)
+
+  function handleTitleTap() {
+    if (isAdmin) return
+    tapCountRef.current += 1
+    if (tapTimerRef.current) clearTimeout(tapTimerRef.current)
+    tapTimerRef.current = setTimeout(() => { tapCountRef.current = 0 }, 1500)
+    if (tapCountRef.current >= 5) {
+      tapCountRef.current = 0
+      setShowAdminPrompt(true)
+    }
+  }
+
+  function submitAdminKey(e) {
+    e?.preventDefault()
+    if (adminInput === import.meta.env.VITE_ADMIN_KEY) {
+      localStorage.setItem('admin_unlocked', '1')
+      setIsAdmin(true)
+      setShowAdminPrompt(false)
+      setAdminInput('')
+      setAdminError(false)
+    } else {
+      setAdminError(true)
+    }
+  }
+
+  function closeAdminPrompt() {
+    setShowAdminPrompt(false)
+    setAdminInput('')
+    setAdminError(false)
+  }
 
   const fetchGame = useCallback(async () => {
     const { data, error: fetchErr } = await supabase
@@ -88,6 +125,17 @@ export default function App() {
     if (error) { setDbError(`Reset failed: ${error.message}`); fetchGame() }
   }, [game.quarter, chatName, fetchGame, persistAs])
 
+  const startNewGame = useCallback(async () => {
+    const patch = { seahawks_score: 0, opponent_score: 0, quarter: 1 }
+    setConfirmingNewGame(false)
+    setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
+    const [scoreError] = await Promise.all([
+      persistAs(patch),
+      supabase.from('chat_messages').delete().gte('id', 0),
+    ])
+    if (scoreError) { setDbError(`New game failed: ${scoreError.message}`); fetchGame() }
+  }, [chatName, fetchGame, persistAs])
+
   useEffect(() => {
     fetchGame()
 
@@ -115,13 +163,39 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1 className="app-title">Seahawks Gameday</h1>
+        <h1 className="app-title" onClick={handleTitleTap} style={{ cursor: 'default', userSelect: 'none' }}>
+          Seahawks Gameday{isAdmin && <span className="admin-badge">ADMIN</span>}
+        </h1>
         <StatusBar connected={connected} updatedAt={game.updated_at} updatedBy={game.updated_by} onRefresh={fetchGame} />
       </header>
 
       {dbError && (
         <div className="db-error">
           ⚠ {dbError}
+        </div>
+      )}
+
+      {showAdminPrompt && (
+        <div className="score-edit-overlay" onClick={closeAdminPrompt}>
+          <div className="score-edit-card" onClick={e => e.stopPropagation()}>
+            <div className="score-edit-title">Admin Access</div>
+            <form onSubmit={submitAdminKey}>
+              <input
+                className="score-edit-input"
+                type="password"
+                placeholder="Passphrase"
+                value={adminInput}
+                onChange={e => { setAdminInput(e.target.value); setAdminError(false) }}
+                onKeyDown={e => { if (e.key === 'Escape') closeAdminPrompt() }}
+                autoFocus
+              />
+            </form>
+            {adminError && <div className="admin-error">Incorrect passphrase</div>}
+            <div className="score-edit-actions">
+              <button className="btn score-edit-cancel" onClick={closeAdminPrompt}>Cancel</button>
+              <button className="btn score-edit-confirm" onClick={submitAdminKey}>Unlock</button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -168,6 +242,20 @@ export default function App() {
                 Reset Score
               </button>
             )}
+
+            {isAdmin && (
+              confirmingNewGame ? (
+                <div className="reset-confirm">
+                  <span className="reset-confirm-label">Reset scores, Q1 &amp; clear chat?</span>
+                  <button className="btn btn-newgame-confirm" onClick={startNewGame}>Yes, new game</button>
+                  <button className="btn btn-reset-cancel" onClick={() => setConfirmingNewGame(false)}>Cancel</button>
+                </div>
+              ) : (
+                <button className="btn btn-newgame" onClick={() => setConfirmingNewGame(true)}>
+                  ★ New Game
+                </button>
+              )
+            )}
           </section>
 
           <Moments />
@@ -178,7 +266,8 @@ export default function App() {
             {chatName ? (
               <Chat
                 name={chatName}
-                onChangeName={() => { localStorage.removeItem('chat_name'); setChatName(null) }}
+                isAdmin={isAdmin}
+                onChangeName={() => { localStorage.removeItem('chat_name'); localStorage.removeItem('admin_unlocked'); setChatName(null); setIsAdmin(false) }}
               />
             ) : (
               <JoinPrompt onJoin={name => { localStorage.setItem('chat_name', name); setChatName(name) }} />
