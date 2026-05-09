@@ -78,12 +78,12 @@ export default function App() {
   }, [game, fetchGame])
 
   const resetGame = useCallback(async () => {
-    const patch = { seahawks_score: 0, opponent_score: 0, quarter: 1 }
+    const patch = { seahawks_score: 0, opponent_score: 0 }
     setConfirmingReset(false)
     setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString() }))
-    const error = await persist(patch)
+    const error = await persist({ ...patch, quarter: game.quarter })
     if (error) { setDbError(`Reset failed: ${error.message}`); fetchGame() }
-  }, [fetchGame])
+  }, [game.quarter, fetchGame])
 
   useEffect(() => {
     fetchGame()
@@ -146,13 +146,13 @@ export default function App() {
 
           {confirmingReset ? (
             <div className="reset-confirm">
-              <span className="reset-confirm-label">Reset everything?</span>
+              <span className="reset-confirm-label">Zero out scores?</span>
               <button className="btn btn-reset-confirm" onClick={resetGame}>Yes, reset</button>
               <button className="btn btn-reset-cancel" onClick={() => setConfirmingReset(false)}>Cancel</button>
             </div>
           ) : (
             <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>
-              Reset Game
+              Reset Score
             </button>
           )}
         </section>
