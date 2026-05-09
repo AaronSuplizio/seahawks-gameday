@@ -252,7 +252,7 @@ export default function App() {
 
           </section>
 
-          <Moments />
+          <Moments name={chatName} />
         </div>
 
         <div className="main-right">

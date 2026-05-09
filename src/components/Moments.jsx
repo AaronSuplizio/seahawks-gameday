@@ -70,22 +70,22 @@ function launchConfetti() {
   return () => { cancelAnimationFrame(frame); canvas.remove() }
 }
 
-export default function Moments() {
+export default function Moments({ name }) {
   const [active, setActive] = useState(null)
   const channelRef = useRef(null)
   const timerRef = useRef(null)
 
-  function showMoment(moment) {
+  function showMoment(moment, from = null) {
     if (timerRef.current) clearTimeout(timerRef.current)
     if (navigator.vibrate) navigator.vibrate(moment.vibrate)
-    setActive({ ...moment, key: Date.now() })
+    setActive({ ...moment, key: Date.now(), from })
     if (moment.id === 'touchdown') launchConfetti()
     timerRef.current = setTimeout(() => setActive(null), 2800)
   }
 
   function fireMoment(moment) {
-    showMoment(moment)
-    channelRef.current?.send({ type: 'broadcast', event: 'moment', payload: { id: moment.id } })
+    showMoment(moment, name)
+    channelRef.current?.send({ type: 'broadcast', event: 'moment', payload: { id: moment.id, from: name } })
   }
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function Moments() {
       .channel('game_moments')
       .on('broadcast', { event: 'moment' }, ({ payload }) => {
         const moment = MOMENTS.find(m => m.id === payload.id)
-        if (moment) showMoment(moment)
+        if (moment) showMoment(moment, payload.from || null)
       })
       .subscribe()
 
@@ -128,6 +128,7 @@ export default function Moments() {
           <div className="moment-overlay-content">
             <div className="moment-overlay-emoji">{active.emoji}</div>
             <div className="moment-overlay-text">{active.label}</div>
+            {active.from && <div className="moment-overlay-from">From {active.from}</div>}
           </div>
         </div>,
         document.body
