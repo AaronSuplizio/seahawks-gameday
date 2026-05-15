@@ -106,19 +106,25 @@ export default function Moments({ name }) {
     <>
       <section className="moments-section">
         <div className="moments-label">GAME MOMENTS</div>
-        <div className="moments-grid">
+        <div className={`moments-grid${!name ? ' moments-grid-locked' : ''}`}>
           {MOMENTS.map(moment => (
             <button
               key={moment.id}
               className="btn-moment"
               style={{ '--mc': moment.color }}
-              onClick={() => fireMoment(moment)}
+              onClick={() => name && fireMoment(moment)}
+              disabled={!name}
             >
               <span className="moment-emoji">{moment.emoji}</span>
               <span className="moment-label">{moment.label}</span>
             </button>
           ))}
         </div>
+        {!name && (
+          <div className="moments-login-notice">
+            Join the chat to send game moments →
+          </div>
+        )}
       </section>
 
       {active && createPortal(

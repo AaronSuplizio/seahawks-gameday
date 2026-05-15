@@ -781,6 +781,14 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
+.moments-grid-locked { opacity: 0.35; pointer-events: none; }
+.moments-login-notice {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--gray);
+  text-align: center;
+  padding: 2px 0 4px;
+}
 .btn-moment {
   display: flex;
   flex-direction: column;
