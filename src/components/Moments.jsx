@@ -9,6 +9,7 @@ const MOMENTS = [
   { id: 'chains',       label: 'First Down, Move the Chains!', emoji: '⛓️', color: '#c0a060', vibrate: [80, 40, 80] },
   { id: 'defense',      label: 'Defense!',                     emoji: '🛡️', color: '#5b8dd9', vibrate: [100, 30, 100, 30, 100] },
   { id: 'wth',          label: 'What just happened?',          emoji: '🤮', color: '#9370db', vibrate: [500] },
+  { id: 'flag',         label: 'Nice Pull!',                   emoji: '🚩', color: '#e04040', vibrate: [60, 30, 60] },
   { id: 'fired-up',     label: "Let's get fired up!",          emoji: '🔥', color: '#ff6b35', vibrate: [80, 30, 200, 30, 80] },
 ]
 
