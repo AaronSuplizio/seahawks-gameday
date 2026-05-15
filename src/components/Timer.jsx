@@ -10,7 +10,7 @@ async function patchTimer(patch) {
   await supabase.from('game_state').update(patch).eq('id', 1)
 }
 
-export default function Timer({ game, isAdmin }) {
+export default function Timer({ game, isAdmin, onReset, onFinal, isFinal, confirmingReset, setConfirmingReset }) {
   const timerSeconds = game.timer_seconds ?? 600
   const timerRunning = !!game.timer_running
   const timerEndAt = game.timer_end_at
@@ -132,16 +132,32 @@ export default function Timer({ game, isAdmin }) {
 
       {isAdmin && (
         <div className="timer-controls">
-          <div className="timer-btn-row">
-            {timerRunning ? (
-              <button className="btn-timer-main btn-timer-pause" onClick={pause}>⏸ Pause</button>
+          <div className="admin-actions-box">
+            <div className="admin-actions-label">ADMIN</div>
+            {confirmingReset ? (
+              <div className="admin-actions-grid">
+                <button className="btn-admin btn-admin-confirm" onClick={onReset}>✓ Confirm Reset</button>
+                <button className="btn-admin btn-admin-cancel" onClick={() => setConfirmingReset(false)}>✕ Cancel</button>
+              </div>
             ) : (
-              <button className="btn-timer-main btn-timer-start" onClick={start} disabled={isExpired}>
-                ▶ {isReset ? 'Start' : 'Resume'}
-              </button>
-            )}
-            {!timerRunning && (
-              <button className="btn-timer-secondary" onClick={openSetClock}>✎ Set Clock</button>
+              <div className="admin-actions-grid">
+                {timerRunning ? (
+                  <button className="btn-admin btn-admin-pause" onClick={pause}>⏸ Pause</button>
+                ) : (
+                  <button className="btn-admin btn-admin-start" onClick={start} disabled={isExpired}>
+                    ▶ {isReset ? 'Start' : 'Resume'}
+                  </button>
+                )}
+                <button className="btn-admin btn-admin-setclock" onClick={openSetClock} disabled={timerRunning}>
+                  ✎ Set Clock
+                </button>
+                <button className="btn-admin btn-admin-reset" onClick={() => setConfirmingReset(true)}>
+                  Reset Score
+                </button>
+                <button className="btn-admin btn-admin-final" onClick={onFinal}>
+                  {isFinal ? 'Undo Final' : 'Final Score'}
+                </button>
+              </div>
             )}
           </div>
         </div>

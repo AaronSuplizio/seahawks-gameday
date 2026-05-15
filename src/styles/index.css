@@ -322,71 +322,36 @@ body {
   align-items: center;
   gap: 10px;
 }
-.timer-btn-row {
-  display: flex;
+.admin-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
-  align-items: stretch;
   width: 100%;
 }
-.btn-timer-main {
-  flex: 1;
+.btn-admin {
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 13px 20px;
-  border-radius: 10px;
-  border: none;
+  letter-spacing: 0.05em;
+  padding: 12px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--gray-dim);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: filter 0.1s;
-}
-.btn-timer-main:disabled { opacity: 0.35; cursor: default; }
-.btn-timer-start {
-  background: var(--gray-dim);
-  color: var(--white);
-  border: 1px solid var(--border);
-}
-.btn-timer-start:hover { background: rgba(255,255,255,0.12); filter: none; }
-.btn-timer-pause {
-  background: var(--gray-dim);
-  color: var(--white);
-  border: 1px solid var(--border);
-}
-.btn-timer-pause:hover { background: rgba(255,255,255,0.12); }
-.btn-timer-duration {
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 8px 20px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--gray);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: border-color 0.15s, color 0.15s;
-  align-self: center;
-}
-.btn-timer-duration:hover { border-color: rgba(255,255,255,0.25); color: var(--white); }
-.btn-timer-secondary {
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  padding: 13px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--gray-dim);
-  color: var(--gray);
-  cursor: pointer;
+  transition: background 0.1s, opacity 0.1s;
   white-space: nowrap;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.1s, color 0.1s;
+  text-align: center;
 }
-.btn-timer-secondary:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+.btn-admin:disabled { opacity: 0.3; cursor: default; }
+.btn-admin:not(:disabled):hover { background: rgba(255,255,255,0.11); }
+.btn-admin-start   { color: var(--white); }
+.btn-admin-pause   { color: var(--white); }
+.btn-admin-setclock{ color: var(--gray); }
+.btn-admin-reset   { color: rgba(255,100,100,0.75); border-color: rgba(255,100,100,0.2); }
+.btn-admin-final   { color: rgba(105,190,40,0.85);  border-color: rgba(105,190,40,0.2); }
+.btn-admin-confirm { color: rgba(255,100,100,0.9);  border-color: rgba(255,100,100,0.35); }
+.btn-admin-cancel  { color: var(--gray); }
 /* Set Clock modal */
 .timer-set-overlay {
   position: fixed;
@@ -665,49 +630,6 @@ body {
   text-transform: uppercase;
   text-align: center;
 }
-.admin-actions-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.btn-reset {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 10px;
-  background: transparent;
-  color: rgba(255,100,100,0.6);
-  border: 1px solid rgba(255,100,100,0.2);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: color 0.12s, border-color 0.12s;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn-reset:hover { color: #ff6b6b; border-color: rgba(255,100,100,0.4); }
-.btn-final {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 10px;
-  background: transparent;
-  color: rgba(105,190,40,0.7);
-  border: 1px solid rgba(105,190,40,0.25);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: color 0.12s, border-color 0.12s;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn-final:hover { color: var(--green); border-color: rgba(105,190,40,0.5); }
 
 .btn-newgame {
   display: flex;
@@ -743,43 +665,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-.reset-confirm {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-.reset-confirm-label {
-  flex: 1;
-  font-family: var(--font-display);
-  font-size: 0.82rem;
-  letter-spacing: 0.04em;
-  color: #fca5a5;
-}
-.btn-reset-confirm {
-  background: #b91c1c;
-  color: var(--white);
-  font-family: var(--font-display);
-  font-size: 0.82rem;
-  font-weight: 600;
-  padding: 9px 14px;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn-reset-cancel {
-  background: var(--gray-dim);
-  color: var(--gray);
-  font-family: var(--font-display);
-  font-size: 0.82rem;
-  font-weight: 600;
-  padding: 9px 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
 
 /* Refresh button */
 .status-right {

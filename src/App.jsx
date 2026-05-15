@@ -231,7 +231,15 @@ export default function App() {
             } : undefined}
           />
 
-          <Timer game={game} isAdmin={isAdmin} />
+          <Timer
+            game={game}
+            isAdmin={isAdmin}
+            onReset={resetGame}
+            onFinal={setGameFinal}
+            isFinal={game.quarter === 5}
+            confirmingReset={confirmingReset}
+            setConfirmingReset={setConfirmingReset}
+          />
 
           {isAdmin && (
             <section className="controls-section">
@@ -250,24 +258,6 @@ export default function App() {
               <div className="quarter-card">
                 <div className="quarter-card-label">QUARTER</div>
                 <QuarterControls quarter={game.quarter} onSetQuarter={setQuarter} />
-              </div>
-
-              <div className="admin-actions-box">
-                <div className="admin-actions-label">ADMIN</div>
-                <div className="admin-actions-row">
-                  {confirmingReset ? (
-                    <div className="reset-confirm">
-                      <span className="reset-confirm-label">Zero out scores?</span>
-                      <button className="btn btn-reset-confirm" onClick={resetGame}>Yes, reset</button>
-                      <button className="btn btn-reset-cancel" onClick={() => setConfirmingReset(false)}>Cancel</button>
-                    </div>
-                  ) : (
-                    <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>Reset Score</button>
-                  )}
-                  <button className="btn btn-final" onClick={setGameFinal}>
-                    {game.quarter === 5 ? 'Undo Final' : 'Final Score'}
-                  </button>
-                </div>
               </div>
             </section>
           )}
