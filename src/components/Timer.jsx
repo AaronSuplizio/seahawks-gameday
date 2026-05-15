@@ -10,7 +10,7 @@ async function patchTimer(patch) {
   await supabase.from('game_state').update(patch).eq('id', 1)
 }
 
-export default function Timer({ game, isAdmin, onReset, onFinal, isFinal, confirmingReset, setConfirmingReset }) {
+export default function Timer({ game, isAdmin, onReset, onFinal, isFinal, onHalftime, isHalftime, confirmingReset, setConfirmingReset }) {
   const timerSeconds = game.timer_seconds ?? 600
   const timerRunning = !!game.timer_running
   const timerEndAt = game.timer_end_at
@@ -156,6 +156,9 @@ export default function Timer({ game, isAdmin, onReset, onFinal, isFinal, confir
                 </button>
                 <button className="btn-admin btn-admin-final" onClick={onFinal}>
                   {isFinal ? 'Undo Final' : 'Final Score'}
+                </button>
+                <button className="btn-admin btn-admin-halftime" onClick={onHalftime}>
+                  {isHalftime ? 'Undo HT' : 'Halftime'}
                 </button>
                 <button className="btn-admin btn-admin-duration" onClick={openSetDuration}>
                   {quarterMins} Min Quarters

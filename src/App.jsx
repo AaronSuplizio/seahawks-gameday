@@ -147,6 +147,16 @@ export default function App() {
     if (error) { setDbError(`Save failed: ${error.message}`); fetchGame() }
   }, [game.quarter, chatName, fetchGame, persistAs])
 
+  const setGameHalftime = useCallback(async () => {
+    const isHalftime = game.quarter === 6
+    const patch = isHalftime
+      ? { quarter: 3 }
+      : { quarter: 6, timer_running: false, timer_end_at: null, timer_paused_remaining: 0 }
+    setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
+    const error = await persistAs(patch)
+    if (error) { setDbError(`Save failed: ${error.message}`); fetchGame() }
+  }, [game.quarter, chatName, fetchGame, persistAs])
+
   useEffect(() => {
     fetchGame()
 
@@ -237,6 +247,8 @@ export default function App() {
             onReset={resetGame}
             onFinal={setGameFinal}
             isFinal={game.quarter === 5}
+            onHalftime={setGameHalftime}
+            isHalftime={game.quarter === 6}
             confirmingReset={confirmingReset}
             setConfirmingReset={setConfirmingReset}
           />
