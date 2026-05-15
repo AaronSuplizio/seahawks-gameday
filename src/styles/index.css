@@ -971,7 +971,7 @@ body {
 }
 .chat-title {
   font-family: var(--font-display);
-  font-size: 0.82rem;
+  font-size: 0.82em;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -981,12 +981,27 @@ body {
   background: none;
   border: none;
   color: var(--gray);
-  font-size: 0.72rem;
+  font-size: 0.72em;
   cursor: pointer;
   padding: 2px 6px;
   border-radius: 4px;
   font-family: var(--font-ui);
 }
+.btn-font-size {
+  font-family: var(--font-ui);
+  font-size: 0.72em;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--gray-dim);
+  color: var(--gray);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.4;
+  transition: color 0.1s, background 0.1s;
+}
+.btn-font-size:hover { color: var(--white); background: rgba(255,255,255,0.12); }
 .chat-change-name:hover { color: var(--white); }
 
 .chat-header-right {
@@ -1017,7 +1032,7 @@ body {
   margin-bottom: 4px;
 }
 .btn-clear-chat {
-  font-size: 0.68rem;
+  font-size: 0.68em;
   padding: 3px 8px;
   background: rgba(255,68,68,0.12);
   color: var(--red);
@@ -1078,8 +1093,8 @@ body {
 .chat-msg-mine { align-self: flex-end; align-items: flex-end; }
 .chat-msg-meta { display: flex; align-items: baseline; gap: 6px; }
 .chat-msg-mine .chat-msg-meta { flex-direction: row-reverse; }
-.chat-msg-name { font-size: 0.7rem; font-weight: 600; color: var(--green); }
-.chat-msg-time { font-size: 0.66rem; color: var(--gray); }
+.chat-msg-name { font-size: 0.7em; font-weight: 600; color: var(--green); }
+.chat-msg-time { font-size: 0.66em; color: var(--gray); }
 .chat-delete-btn {
   display: none;
   background: none;
@@ -1101,7 +1116,7 @@ body {
   background: rgba(255,255,255,0.08);
   border-radius: 12px 12px 12px 3px;
   padding: 8px 12px;
-  font-size: 0.88rem;
+  font-size: 0.88em;
   line-height: 1.4;
   word-break: break-word;
 }

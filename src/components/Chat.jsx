@@ -47,6 +47,7 @@ export default function Chat({ name, isAdmin, onChangeName }) {
   const [sendError, setSendError] = useState(null)
   const [confirmingClear, setConfirmingClear] = useState(false)
   const [activeMsgId, setActiveMsgId] = useState(null)
+  const [fontScale, setFontScale] = useState(1.0)
   const listRef = useRef(null)
 
   const scrollToBottom = useCallback(() => {
@@ -131,10 +132,12 @@ export default function Chat({ name, isAdmin, onChangeName }) {
   }
 
   return (
-    <div className="chat">
+    <div className="chat" style={{ fontSize: `${fontScale}rem` }}>
       <div className="chat-header">
         <span className="chat-title">Parent Chat</span>
         <div className="chat-header-right">
+          <button className="btn-font-size" onClick={() => setFontScale(s => Math.max(0.75, +(s - 0.1).toFixed(1)))}>A−</button>
+          <button className="btn-font-size" onClick={() => setFontScale(s => Math.min(1.4, +(s + 0.1).toFixed(1)))}>A+</button>
           {isAdmin && (
             confirmingClear ? (
               <span className="chat-clear-confirm">
