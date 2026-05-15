@@ -14,7 +14,7 @@ function useSecondsSince(isoString) {
 
 function formatAge(s) {
   if (s === null || s < 0) return null
-  if (s < 15) return 'Just now'
+  if (s < 15) return 'just now'
   if (s < 60) return '<1m ago'
   if (s < 3600) return `${Math.floor(s / 60)}m ago`
   return `${Math.floor(s / 3600)}h ago`
