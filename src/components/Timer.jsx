@@ -157,19 +157,14 @@ export default function Timer({ game, isAdmin, onReset, onFinal, isFinal, confir
                 <button className="btn-admin btn-admin-final" onClick={onFinal}>
                   {isFinal ? 'Undo Final' : 'Final Score'}
                 </button>
+                <button className="btn-admin btn-admin-duration" onClick={openSetDuration}>
+                  {quarterMins} Min Quarters
+                </button>
               </div>
             )}
           </div>
         </div>
       )}
-
-      <button
-        className="btn-timer-duration"
-        onClick={isAdmin ? openSetDuration : undefined}
-        style={!isAdmin ? { cursor: 'default', pointerEvents: 'none' } : undefined}
-      >
-        {quarterMins} Min Quarters
-      </button>
 
       {/* Set Clock modal — MM:SS */}
       {showSetClock && (

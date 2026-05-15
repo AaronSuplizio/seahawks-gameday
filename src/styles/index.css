@@ -356,6 +356,12 @@ body {
 .btn-admin-final   { color: rgba(105,190,40,0.85);  border-color: rgba(105,190,40,0.2); }
 .btn-admin-confirm { color: rgba(255,100,100,0.9);  border-color: rgba(255,100,100,0.35); }
 .btn-admin-cancel  { color: var(--gray); }
+.btn-admin-duration {
+  grid-column: 1 / -1;
+  color: var(--gray);
+  min-height: 0;
+  padding: 8px;
+}
 /* Set Clock modal */
 .timer-set-overlay {
   position: fixed;
