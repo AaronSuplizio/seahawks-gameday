@@ -138,11 +138,14 @@ export default function App() {
   }, [chatName, fetchGame, persistAs])
 
   const setGameFinal = useCallback(async () => {
-    const patch = { quarter: 5, timer_running: false, timer_end_at: null, timer_paused_remaining: 0 }
+    const isFinal = game.quarter === 5
+    const patch = isFinal
+      ? { quarter: 4 }
+      : { quarter: 5, timer_running: false, timer_end_at: null, timer_paused_remaining: 0 }
     setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
     const error = await persistAs(patch)
     if (error) { setDbError(`Save failed: ${error.message}`); fetchGame() }
-  }, [chatName, fetchGame, persistAs])
+  }, [game.quarter, chatName, fetchGame, persistAs])
 
   useEffect(() => {
     fetchGame()
@@ -261,7 +264,9 @@ export default function App() {
                   ) : (
                     <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>Reset Score</button>
                   )}
-                  <button className="btn btn-final" onClick={setGameFinal}>Final Score</button>
+                  <button className="btn btn-final" onClick={setGameFinal}>
+                    {game.quarter === 5 ? 'Undo Final' : 'Final Score'}
+                  </button>
                 </div>
               </div>
             </section>
