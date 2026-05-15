@@ -39,7 +39,8 @@ export default function StatusBar({ connected, updatedAt, updatedBy, onRefresh, 
       </div>
       <div className="status-right">
         <button className="btn-status btn-status-left" onClick={() => window.location.reload()}>
-          ↻ Refresh App
+          <span>↻</span>
+          <span>Refresh App</span>
         </button>
         <button className="btn-status btn-status-right" onClick={onShare}>
           {shareCopied ? 'Copied!' : (
