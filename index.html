@@ -17,6 +17,18 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Reload once if a JS/CSS chunk 404s after a Vercel redeploy -->
+    <script>
+      window.addEventListener('error', function(e) {
+        var t = e.target && e.target.tagName
+        if (t === 'SCRIPT' || t === 'LINK') {
+          if (!sessionStorage.getItem('reloaded')) {
+            sessionStorage.setItem('reloaded', '1')
+            window.location.reload()
+          }
+        }
+      }, true)
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

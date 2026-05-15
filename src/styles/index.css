@@ -118,7 +118,14 @@ body {
 .dot-connected    { background: var(--green); box-shadow: 0 0 6px var(--green); }
 .dot-disconnected { background: var(--red); }
 .connection-label { font-weight: 600; color: var(--white); }
-.last-updated     { color: var(--gray); }
+.last-updated {
+  color: var(--gray);
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+.last-updated-line1 { color: var(--gray); }
+.last-updated-line2 { color: var(--white); font-weight: 500; }
 
 /* ── Main ────────────────────────────────────────────────────────── */
 .app-main {

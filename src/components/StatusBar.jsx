@@ -24,18 +24,17 @@ export default function StatusBar({ connected, updatedAt, updatedBy, onRefresh, 
   const seconds = useSecondsSince(updatedAt)
   const age = formatAge(seconds)
 
-  const updatedMsg = age
-    ? updatedBy
-      ? `· Last updated by ${updatedBy} ${age}`
-      : `· Last updated ${age}`
-    : null
-
   return (
     <div className="status-bar">
       <div className="status-left">
         <span className={`connection-dot ${connected ? 'dot-connected' : 'dot-disconnected'}`} />
         <span className="connection-label">{connected ? 'Live' : 'Offline'}</span>
-        {updatedMsg && <span className="last-updated">{updatedMsg}</span>}
+        {age && (
+          <span className="last-updated">
+            <span className="last-updated-line1">· {updatedBy ? 'Last updated by' : 'Last updated'}</span>
+            <span className="last-updated-line2">{updatedBy ? `${updatedBy} ${age}` : age}</span>
+          </span>
+        )}
       </div>
       <div className="status-right">
         <button className="btn-status btn-status-left" onClick={() => window.location.reload()}>
