@@ -404,6 +404,7 @@ body {
 .timer-set-input::-webkit-outer-spin-button,
 .timer-set-input::-webkit-inner-spin-button { -webkit-appearance: none; }
 .timer-set-input:focus { border-color: var(--green); }
+.timer-set-input-error { border-color: var(--red) !important; color: var(--red); }
 .timer-set-unit {
   font-family: var(--font-display);
   font-size: 0.72rem;
@@ -411,6 +412,14 @@ body {
   letter-spacing: 0.12em;
   color: var(--gray);
 }
+.timer-set-hint {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  color: var(--gray);
+  opacity: 0.6;
+}
+.timer-set-hint-error { color: var(--red); opacity: 1; font-weight: 600; }
+.timer-set-confirm:disabled { opacity: 0.35; cursor: default; filter: none; }
 .timer-set-colon {
   font-family: var(--font-display);
   font-size: 2.8rem;

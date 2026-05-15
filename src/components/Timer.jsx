@@ -43,6 +43,13 @@ export default function Timer({ game, isAdmin }) {
   const isPaused = !timerRunning && timerPausedRemaining != null
   const isReset = !timerRunning && timerPausedRemaining == null
 
+  const maxMins = Math.floor(timerSeconds / 60)
+  const minVal = parseInt(minInput) || 0
+  const secVal = parseInt(secInput) || 0
+  const minTooHigh = minVal > maxMins
+  const secTooHigh = secVal > 59
+  const clockInvalid = minTooHigh || secTooHigh || (minVal === 0 && secVal === 0)
+
   function openSetClock() {
     const r = Math.round(getRemaining())
     setMinInput(String(Math.floor(r / 60)))
@@ -56,10 +63,8 @@ export default function Timer({ game, isAdmin }) {
   }
 
   async function applyClock() {
-    const mins = parseInt(minInput) || 0
-    const secs = Math.min(59, parseInt(secInput) || 0)
-    const total = mins * 60 + secs
-    if (total <= 0) return
+    if (clockInvalid) return
+    const total = minVal * 60 + secVal
     await patchTimer({
       timer_seconds: total,
       timer_running: false,
@@ -135,8 +140,8 @@ export default function Timer({ game, isAdmin }) {
               <div className="timer-set-col">
                 <input
                   ref={minRef}
-                  className="timer-set-input"
-                  type="text"
+                  className={`timer-set-input${minTooHigh ? ' timer-set-input-error' : ''}`}
+                  type="tel"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   maxLength={2}
@@ -146,12 +151,13 @@ export default function Timer({ game, isAdmin }) {
                   onKeyDown={e => { if (e.key === 'Enter') applyClock(); if (e.key === 'Escape') closeSetClock() }}
                 />
                 <div className="timer-set-unit">MIN</div>
+                <div className={`timer-set-hint${minTooHigh ? ' timer-set-hint-error' : ''}`}>max {maxMins}</div>
               </div>
               <div className="timer-set-colon">:</div>
               <div className="timer-set-col">
                 <input
-                  className="timer-set-input"
-                  type="text"
+                  className={`timer-set-input${secTooHigh ? ' timer-set-input-error' : ''}`}
+                  type="tel"
                   inputMode="numeric"
                   pattern="[0-9]*"
                   maxLength={2}
@@ -161,11 +167,12 @@ export default function Timer({ game, isAdmin }) {
                   onKeyDown={e => { if (e.key === 'Enter') applyClock(); if (e.key === 'Escape') closeSetClock() }}
                 />
                 <div className="timer-set-unit">SEC</div>
+                <div className={`timer-set-hint${secTooHigh ? ' timer-set-hint-error' : ''}`}>max 59</div>
               </div>
             </div>
             <div className="timer-set-actions">
               <button className="btn timer-set-cancel" onClick={closeSetClock}>Cancel</button>
-              <button className="btn timer-set-confirm" onClick={applyClock}>Set Clock</button>
+              <button className="btn timer-set-confirm" onClick={applyClock} disabled={clockInvalid}>Set Clock</button>
             </div>
           </div>
         </div>
