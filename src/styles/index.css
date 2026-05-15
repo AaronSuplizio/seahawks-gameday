@@ -581,41 +581,29 @@ body {
 }
 
 /* Refresh button */
-.btn-refresh {
+.status-right {
+  display: flex;
+  flex-shrink: 0;
+}
+.btn-status {
   background: transparent;
   color: var(--gray);
-  font-size: 0.73rem;
-  padding: 3px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
+  font-size: 0.72rem;
   font-family: var(--font-ui);
   font-weight: 500;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.btn-share {
-  background: none;
+  padding: 4px 10px;
   border: 1px solid var(--border);
-  color: var(--gray);
-  border-radius: 8px;
-  padding: 6px 8px;
   cursor: pointer;
+  white-space: nowrap;
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: color 0.15s, border-color 0.15s;
+  gap: 5px;
+  transition: color 0.15s, background 0.15s;
   -webkit-tap-highlight-color: transparent;
 }
-.btn-share:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
-.share-copied {
-  font-size: 0.7rem;
-  font-family: var(--font-ui);
-  color: var(--green);
-  white-space: nowrap;
-  padding: 0 2px;
-}
+.btn-status:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+.btn-status-left  { border-radius: 6px 0 0 6px; border-right: none; }
+.btn-status-right { border-radius: 0 6px 6px 0; }
 
 /* ── Moments section ─────────────────────────────────────────────── */
 .moments-section {

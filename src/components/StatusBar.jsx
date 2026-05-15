@@ -37,16 +37,23 @@ export default function StatusBar({ connected, updatedAt, updatedBy, onRefresh, 
         <span className="connection-label">{connected ? 'Live' : 'Offline'}</span>
         {updatedMsg && <span className="last-updated">{updatedMsg}</span>}
       </div>
-      <button className="btn btn-refresh" onClick={onRefresh}>↻ Refresh</button>
-      <button className="btn-share" onClick={onShare} title="Share app">
-        {shareCopied ? <span className="share-copied">Copied!</span> : (
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-            <polyline points="16 6 12 2 8 6"/>
-            <line x1="12" y1="2" x2="12" y2="15"/>
-          </svg>
-        )}
-      </button>
+      <div className="status-right">
+        <button className="btn-status btn-status-left" onClick={() => window.location.reload()}>
+          ↻ Refresh App
+        </button>
+        <button className="btn-status btn-status-right" onClick={onShare}>
+          {shareCopied ? 'Copied!' : (
+            <>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                <polyline points="16 6 12 2 8 6"/>
+                <line x1="12" y1="2" x2="12" y2="15"/>
+              </svg>
+              Share App
+            </>
+          )}
+        </button>
+      </div>
     </div>
   )
 }
