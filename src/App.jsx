@@ -30,7 +30,7 @@ export default function App() {
   async function shareApp() {
     const url = window.location.href
     if (navigator.share) {
-      navigator.share({ title: 'Seahawks Scoreboard', text: 'Follow the game live! 🏈', url })
+      navigator.share({ title: 'Seahawks Sideline', text: 'Follow the game live! 🏈', url })
     } else {
       await navigator.clipboard.writeText(url)
       setShareCopied(true)
@@ -185,7 +185,7 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <h1 className="app-title" onClick={handleTitleTap} style={{ cursor: 'default', userSelect: 'none' }}>
-          Seahawks Scoreboard{isAdmin && <span className="admin-badge">ADMIN</span>}
+          Seahawks Sideline{isAdmin && <span className="admin-badge">ADMIN</span>}
         </h1>
         <StatusBar
           connected={connected}
