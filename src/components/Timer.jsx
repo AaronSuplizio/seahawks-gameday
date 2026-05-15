@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../supabaseClient'
 
 function fmt(seconds) {
@@ -17,8 +17,10 @@ export default function Timer({ game, isAdmin }) {
   const timerPausedRemaining = game.timer_paused_remaining
 
   const [, setTick] = useState(0)
-  const [editingDuration, setEditingDuration] = useState(false)
-  const [durationInput, setDurationInput] = useState('')
+  const [showSetClock, setShowSetClock] = useState(false)
+  const [minInput, setMinInput] = useState('0')
+  const [secInput, setSecInput] = useState('0')
+  const minRef = useRef(null)
 
   useEffect(() => {
     if (!timerRunning) return
@@ -40,6 +42,32 @@ export default function Timer({ game, isAdmin }) {
   const isExpired = remaining <= 0
   const isPaused = !timerRunning && timerPausedRemaining != null
   const isReset = !timerRunning && timerPausedRemaining == null
+
+  function openSetClock() {
+    const r = Math.round(getRemaining())
+    setMinInput(String(Math.floor(r / 60)))
+    setSecInput(String(r % 60))
+    setShowSetClock(true)
+    setTimeout(() => minRef.current?.select(), 50)
+  }
+
+  function closeSetClock() {
+    setShowSetClock(false)
+  }
+
+  async function applyClock() {
+    const mins = parseInt(minInput) || 0
+    const secs = Math.min(59, parseInt(secInput) || 0)
+    const total = mins * 60 + secs
+    if (total <= 0) return
+    await patchTimer({
+      timer_seconds: total,
+      timer_running: false,
+      timer_end_at: null,
+      timer_paused_remaining: null,
+    })
+    setShowSetClock(false)
+  }
 
   async function start() {
     const r = getRemaining()
@@ -67,62 +95,77 @@ export default function Timer({ game, isAdmin }) {
     })
   }
 
-  async function setDuration() {
-    const mins = parseFloat(durationInput)
-    if (!mins || mins <= 0) return
-    await patchTimer({
-      timer_seconds: Math.round(mins * 60),
-      timer_running: false,
-      timer_end_at: null,
-      timer_paused_remaining: null,
-    })
-    setEditingDuration(false)
-  }
-
   let statusClass = 'timer-paused'
   if (timerRunning) statusClass = 'timer-running'
   else if (isExpired && !isReset) statusClass = 'timer-expired'
 
   return (
     <div className="timer-section">
-      <div className="timer-label">QUARTER TIMER</div>
-      <div className={`timer-display ${statusClass}`}>{fmt(remaining)}</div>
+      <div className="timer-label">UNOFFICIAL GAME CLOCK</div>
+      <div
+        className={`timer-display ${statusClass}${isAdmin && !timerRunning ? ' timer-display-clickable' : ''}`}
+        onClick={isAdmin && !timerRunning ? openSetClock : undefined}
+      >
+        {fmt(remaining)}
+      </div>
 
       {isAdmin && (
         <div className="timer-controls">
           {timerRunning ? (
             <button className="btn-timer" onClick={pause}>⏸ Pause</button>
           ) : (
-            <button className="btn-timer btn-timer-primary" onClick={start} disabled={isExpired && !isReset}>
+            <button className="btn-timer btn-timer-primary" onClick={start} disabled={isExpired && isReset}>
               ▶ {isPaused ? 'Resume' : 'Start'}
             </button>
           )}
           <button className="btn-timer" onClick={reset}>↺ Reset</button>
-
-          {isReset && !editingDuration && (
-            <button
-              className="btn-timer btn-timer-config"
-              onClick={() => { setDurationInput(String(Math.round(timerSeconds / 60))); setEditingDuration(true) }}
-            >
-              {Math.round(timerSeconds / 60)}m ✎
+          {!timerRunning && (
+            <button className="btn-timer btn-timer-config" onClick={openSetClock}>
+              ✎ Set Clock
             </button>
           )}
-          {isReset && editingDuration && (
-            <div className="timer-duration-row">
-              <input
-                className="timer-duration-input"
-                type="number"
-                min="1"
-                max="99"
-                value={durationInput}
-                onChange={e => setDurationInput(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter') setDuration(); if (e.key === 'Escape') setEditingDuration(false) }}
-                autoFocus
-              />
-              <span className="timer-duration-unit">min</span>
-              <button className="btn-timer btn-timer-primary" onClick={setDuration}>Set</button>
+        </div>
+      )}
+
+      {showSetClock && (
+        <div className="timer-set-overlay" onClick={closeSetClock}>
+          <div className="timer-set-card" onClick={e => e.stopPropagation()}>
+            <div className="timer-set-title">Set Game Clock</div>
+            <div className="timer-set-inputs">
+              <div className="timer-set-col">
+                <input
+                  ref={minRef}
+                  className="timer-set-input"
+                  type="number"
+                  min="0"
+                  max="99"
+                  value={minInput}
+                  onChange={e => setMinInput(e.target.value)}
+                  onFocus={e => e.target.select()}
+                  onKeyDown={e => { if (e.key === 'Enter') applyClock(); if (e.key === 'Escape') closeSetClock() }}
+                />
+                <div className="timer-set-unit">MIN</div>
+              </div>
+              <div className="timer-set-colon">:</div>
+              <div className="timer-set-col">
+                <input
+                  className="timer-set-input"
+                  type="number"
+                  min="0"
+                  max="59"
+                  value={secInput}
+                  onChange={e => setSecInput(e.target.value)}
+                  onFocus={e => e.target.select()}
+                  onKeyDown={e => { if (e.key === 'Enter') applyClock(); if (e.key === 'Escape') closeSetClock() }}
+                />
+                <div className="timer-set-unit">SEC</div>
+              </div>
             </div>
-          )}
+            <div className="timer-set-actions">
+              <button className="btn timer-set-cancel" onClick={closeSetClock}>Cancel</button>
+              <button className="btn timer-set-confirm" onClick={applyClock}>Set Clock</button>
+            </div>
+          </div>
         </div>
       )}
     </div>
