@@ -98,6 +98,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  flex-wrap: wrap;
 }
 .status-left {
   display: flex;
@@ -714,15 +715,20 @@ body {
   font-size: 0.72rem;
   font-family: var(--font-ui);
   font-weight: 500;
-  padding: 4px 10px;
+  padding: 6px 10px;
   border: 1px solid var(--border);
   cursor: pointer;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 5px;
+  justify-content: center;
+  gap: 2px;
+  line-height: 1.3;
   transition: color 0.15s, background 0.15s;
   -webkit-tap-highlight-color: transparent;
+  min-width: 60px;
 }
 .btn-status:hover { color: var(--white); background: rgba(255,255,255,0.06); }
 .btn-status-left  { border-radius: 6px 0 0 6px; border-right: none; }
@@ -1229,8 +1235,3 @@ body {
   .moment-label { font-size: 0.9rem; }
 }
 
-@media (max-width: 480px) {
-  .btn-status-label { display: none; }
-  .btn-status { padding: 4px 8px; }
-  .last-updated { white-space: normal; }
-}
