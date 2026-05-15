@@ -1111,7 +1111,9 @@ body {
 .chat-delete-btn:active { opacity: 0.6; }
 
 .chat-msg-mine:hover .chat-delete-btn,
-.chat-msg-mine.chat-msg-active .chat-delete-btn { display: block; }
+.chat-msg-mine.chat-msg-active .chat-delete-btn,
+.chat-msg:hover .chat-delete-btn,
+.chat-msg.chat-msg-active .chat-delete-btn { display: block; }
 .chat-msg-bubble {
   background: rgba(255,255,255,0.08);
   border-radius: 12px 12px 12px 3px;
