@@ -269,7 +269,12 @@ export default function App() {
 
               <div className="quarter-card">
                 <div className="quarter-card-label">QUARTER</div>
-                <QuarterControls quarter={game.quarter} onSetQuarter={setQuarter} />
+                <QuarterControls
+                  quarter={game.quarter}
+                  onSetQuarter={setQuarter}
+                  onHalftime={setGameHalftime}
+                  isHalftime={game.quarter === 6}
+                />
               </div>
             </section>
           )}

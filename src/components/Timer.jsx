@@ -157,9 +157,6 @@ export default function Timer({ game, isAdmin, onReset, onFinal, isFinal, onHalf
                 <button className="btn-admin btn-admin-final" onClick={onFinal}>
                   {isFinal ? 'Undo Final' : 'Final Score'}
                 </button>
-                <button className="btn-admin btn-admin-halftime" onClick={onHalftime}>
-                  {isHalftime ? 'Undo HT' : 'Halftime'}
-                </button>
                 <button className="btn-admin btn-admin-duration" onClick={openSetDuration}>
                   {quarterMins} Min Quarters
                 </button>

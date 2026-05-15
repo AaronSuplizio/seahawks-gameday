@@ -361,11 +361,6 @@ body {
 .btn-admin-final   { color: rgba(105,190,40,0.85);  border-color: rgba(105,190,40,0.2); }
 .btn-admin-confirm { color: rgba(255,100,100,0.9);  border-color: rgba(255,100,100,0.35); }
 .btn-admin-cancel   { color: var(--gray); }
-.btn-admin-halftime {
-  grid-column: 1 / -1;
-  color: #d97706;
-  border-color: rgba(217,119,6,0.25);
-}
 .btn-admin-duration {
   grid-column: 1 / -1;
   color: var(--gray);
@@ -603,21 +598,28 @@ body {
   color: var(--gray);
 }
 .quarter-selector {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.quarter-row {
+  display: flex;
+  gap: 8px;
+}
+.quarter-row > .btn-quarter {
+  flex: 1;
 }
 .btn-quarter {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 0;
+  padding: 16px 0;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   background: var(--gray-dim);
   color: var(--gray);
   font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   cursor: pointer;
@@ -629,6 +631,17 @@ body {
   background: var(--green-dim);
   color: var(--green);
   border-color: var(--green);
+}
+.btn-quarter-halftime {
+  width: 100%;
+  background: rgba(217, 119, 6, 0.12);
+  color: #d97706;
+  border-color: rgba(217, 119, 6, 0.35);
+}
+.btn-quarter-halftime-active {
+  background: rgba(217, 119, 6, 0.25);
+  color: #f59e0b;
+  border-color: #d97706;
 }
 
 /* Reset */
