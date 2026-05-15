@@ -43,10 +43,9 @@ export default function Timer({ game, isAdmin }) {
   const isPaused = !timerRunning && timerPausedRemaining != null
   const isReset = !timerRunning && timerPausedRemaining == null
 
-  const maxMins = Math.floor(timerSeconds / 60)
   const minVal = parseInt(minInput) || 0
   const secVal = parseInt(secInput) || 0
-  const minTooHigh = minVal > maxMins
+  const minTooHigh = minVal > 99
   const secTooHigh = secVal > 59
   const clockInvalid = minTooHigh || secTooHigh || (minVal === 0 && secVal === 0)
 
@@ -142,7 +141,6 @@ export default function Timer({ game, isAdmin }) {
                   onKeyDown={e => { if (e.key === 'Enter') applyClock(); if (e.key === 'Escape') closeSetClock() }}
                 />
                 <div className="timer-set-unit">MIN</div>
-                <div className={`timer-set-hint${minTooHigh ? ' timer-set-hint-error' : ''}`}>max {maxMins}</div>
               </div>
               <div className="timer-set-colon">:</div>
               <div className="timer-set-col">
@@ -158,7 +156,6 @@ export default function Timer({ game, isAdmin }) {
                   onKeyDown={e => { if (e.key === 'Enter') applyClock(); if (e.key === 'Escape') closeSetClock() }}
                 />
                 <div className="timer-set-unit">SEC</div>
-                <div className={`timer-set-hint${secTooHigh ? ' timer-set-hint-error' : ''}`}>max 59</div>
               </div>
             </div>
             <div className="timer-set-actions">

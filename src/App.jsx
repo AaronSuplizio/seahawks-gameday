@@ -138,6 +138,10 @@ export default function App() {
   }, [game.quarter, chatName, fetchGame, persistAs])
 
   useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  useEffect(() => {
     fetchGame()
 
     // No row-level filter here — only one row exists, and filters on UPDATE
