@@ -6,7 +6,7 @@ function useSecondsSince(isoString) {
     if (!isoString) return
     const tick = () => setSeconds(Math.floor((Date.now() - new Date(isoString).getTime()) / 1000))
     tick()
-    const id = setInterval(tick, 1000)
+    const id = setInterval(tick, 15000)
     return () => clearInterval(id)
   }, [isoString])
   return seconds
@@ -14,8 +14,8 @@ function useSecondsSince(isoString) {
 
 function formatAge(s) {
   if (s === null || s < 0) return null
-  if (s < 5) return 'just now'
-  if (s < 60) return `${s}s ago`
+  if (s < 15) return 'Just now'
+  if (s < 60) return '<1m ago'
   if (s < 3600) return `${Math.floor(s / 60)}m ago`
   return `${Math.floor(s / 3600)}h ago`
 }
