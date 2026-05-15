@@ -213,47 +213,54 @@ export default function App() {
             seahawksScore={game.seahawks_score}
             opponentScore={game.opponent_score}
             quarter={game.quarter}
-            onSetScore={(team, value) => {
+            onSetScore={chatName ? (team, value) => {
               const key = team === 'seahawks' ? 'seahawks_score' : 'opponent_score'
               const patch = { seahawks_score: game.seahawks_score, opponent_score: game.opponent_score, quarter: game.quarter, [key]: value }
               setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
               persistAs(patch).then(err => { if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() } })
-            }}
+            } : undefined}
           />
 
           <Timer game={game} isAdmin={isAdmin} />
 
-          <section className="controls-section">
-            <div className="team-cards">
-              <div className="team-card">
-                <div className="team-card-name seahawks-label">SEAHAWKS</div>
-                <ScoreControls team="seahawks" onAdjust={adjustScore} />
+          <div className="controls-gate-wrapper">
+            <section className="controls-section">
+              <div className="team-cards">
+                <div className="team-card">
+                  <div className="team-card-name seahawks-label">SEAHAWKS</div>
+                  <ScoreControls team="seahawks" onAdjust={chatName ? adjustScore : () => {}} />
+                </div>
+                <div className="team-card-divider" />
+                <div className="team-card">
+                  <div className="team-card-name opponent-label">OPPONENT</div>
+                  <ScoreControls team="opponent" onAdjust={chatName ? adjustScore : () => {}} />
+                </div>
               </div>
-              <div className="team-card-divider" />
-              <div className="team-card">
-                <div className="team-card-name opponent-label">OPPONENT</div>
-                <ScoreControls team="opponent" onAdjust={adjustScore} />
+
+              <div className="quarter-card">
+                <div className="quarter-card-label">QUARTER</div>
+                <QuarterControls quarter={game.quarter} onSetQuarter={chatName ? setQuarter : () => {}} />
               </div>
-            </div>
 
-            <div className="quarter-card">
-              <div className="quarter-card-label">QUARTER</div>
-              <QuarterControls quarter={game.quarter} onSetQuarter={setQuarter} />
-            </div>
+              {isAdmin && (confirmingReset ? (
+                <div className="reset-confirm">
+                  <span className="reset-confirm-label">Zero out scores?</span>
+                  <button className="btn btn-reset-confirm" onClick={resetGame}>Yes, reset</button>
+                  <button className="btn btn-reset-cancel" onClick={() => setConfirmingReset(false)}>Cancel</button>
+                </div>
+              ) : (
+                <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>
+                  Reset Score
+                </button>
+              ))}
+            </section>
 
-            {isAdmin && (confirmingReset ? (
-              <div className="reset-confirm">
-                <span className="reset-confirm-label">Zero out scores?</span>
-                <button className="btn btn-reset-confirm" onClick={resetGame}>Yes, reset</button>
-                <button className="btn btn-reset-cancel" onClick={() => setConfirmingReset(false)}>Cancel</button>
+            {!chatName && (
+              <div className="controls-locked-overlay">
+                <span className="controls-locked-msg">Enter your name in the chat to interact</span>
               </div>
-            ) : (
-              <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>
-                Reset Score
-              </button>
-            ))}
-
-          </section>
+            )}
+          </div>
 
           <Moments name={chatName} />
         </div>
