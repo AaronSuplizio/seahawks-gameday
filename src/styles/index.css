@@ -1122,7 +1122,7 @@ body {
 }
 .chat-msg-mine .chat-msg-bubble {
   background: var(--green);
-  color: var(--navy);
+  color: #ffffff;
   border-radius: 12px 12px 3px 12px;
 }
 
