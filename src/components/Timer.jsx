@@ -92,14 +92,6 @@ export default function Timer({ game, isAdmin }) {
     })
   }
 
-  async function reset() {
-    await patchTimer({
-      timer_running: false,
-      timer_end_at: null,
-      timer_paused_remaining: null,
-    })
-  }
-
   let statusClass = 'timer-paused'
   if (timerRunning) statusClass = 'timer-running'
   else if (isExpired && !isReset) statusClass = 'timer-expired'
@@ -116,19 +108,18 @@ export default function Timer({ game, isAdmin }) {
 
       {isAdmin && (
         <div className="timer-controls">
-          {timerRunning ? (
-            <button className="btn-timer" onClick={pause}>⏸ Pause</button>
-          ) : (
-            <button className="btn-timer btn-timer-primary" onClick={start} disabled={isExpired && isReset}>
-              ▶ {isPaused ? 'Resume' : 'Start'}
-            </button>
-          )}
-          <button className="btn-timer" onClick={reset}>↺ Reset</button>
-          {!timerRunning && (
-            <button className="btn-timer btn-timer-config" onClick={openSetClock}>
-              ✎ Set Clock
-            </button>
-          )}
+          <div className="timer-btn-row">
+            {timerRunning ? (
+              <button className="btn-timer-main btn-timer-pause" onClick={pause}>⏸ Pause</button>
+            ) : (
+              <button className="btn-timer-main btn-timer-start" onClick={start} disabled={isExpired}>
+                ▶ {isReset ? 'Start' : 'Resume'}
+              </button>
+            )}
+            {!timerRunning && (
+              <button className="btn-timer-secondary" onClick={openSetClock}>✎ Set Clock</button>
+            )}
+          </div>
         </div>
       )}
 

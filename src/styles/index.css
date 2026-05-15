@@ -310,36 +310,54 @@ body {
 .timer-running { color: var(--green); }
 .timer-expired { color: var(--red); }
 
-.timer-controls {
+.timer-controls { width: 100%; }
+.timer-btn-row {
   display: flex;
-  align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
+  align-items: stretch;
+  width: 100%;
 }
-.btn-timer {
+.btn-timer-main {
+  flex: 1;
   font-family: var(--font-display);
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 7px 14px;
-  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 13px 20px;
+  border-radius: 10px;
+  border: none;
   cursor: pointer;
-  border: 1px solid var(--border);
+  -webkit-tap-highlight-color: transparent;
+  transition: filter 0.1s;
+}
+.btn-timer-main:disabled { opacity: 0.35; cursor: default; }
+.btn-timer-start {
+  background: var(--green);
+  color: var(--navy);
+}
+.btn-timer-start:hover { filter: brightness(1.08); }
+.btn-timer-pause {
   background: var(--gray-dim);
   color: var(--white);
+  border: 1px solid var(--border);
+}
+.btn-timer-pause:hover { background: rgba(255,255,255,0.12); }
+.btn-timer-secondary {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 600;
   letter-spacing: 0.04em;
+  padding: 13px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--gray-dim);
+  color: var(--gray);
+  cursor: pointer;
+  white-space: nowrap;
   -webkit-tap-highlight-color: transparent;
-  transition: background 0.1s;
+  transition: background 0.1s, color 0.1s;
 }
-.btn-timer:hover { background: rgba(255,255,255,0.12); }
-.btn-timer:disabled { opacity: 0.35; cursor: default; }
-.btn-timer-primary {
-  background: rgba(105,190,40,0.12);
-  border-color: rgba(105,190,40,0.4);
-  color: var(--green);
-}
-.btn-timer-primary:hover { background: rgba(105,190,40,0.22); }
-.btn-timer-config { color: var(--gray); font-size: 0.74rem; }
+.btn-timer-secondary:hover { background: rgba(255,255,255,0.1); color: var(--white); }
 /* Set Clock modal */
 .timer-set-overlay {
   position: fixed;
