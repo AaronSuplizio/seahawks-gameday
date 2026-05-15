@@ -66,13 +66,11 @@ export default function Timer({ game, isAdmin }) {
     setMinInput(String(Math.floor(r / 60)))
     setSecInput(String(r % 60))
     setShowSetClock(true)
-    setTimeout(() => minRef.current?.select(), 50)
   }
 
   function openSetDuration() {
     setDurInput(String(Math.round(timerSeconds / 60)))
     setShowSetDuration(true)
-    setTimeout(() => durRef.current?.select(), 50)
   }
 
   async function applyClock() {
@@ -173,6 +171,7 @@ export default function Timer({ game, isAdmin }) {
                   pattern="[0-9]*"
                   maxLength={2}
                   value={minInput}
+                  autoFocus
                   onChange={e => setMinInput(e.target.value.replace(/\D/g, ''))}
                   onFocus={e => e.target.select()}
                   onKeyDown={e => { if (e.key === 'Enter') applyClock(); if (e.key === 'Escape') setShowSetClock(false) }}
@@ -218,6 +217,7 @@ export default function Timer({ game, isAdmin }) {
                   pattern="[0-9]*"
                   maxLength={2}
                   value={durInput}
+                  autoFocus
                   onChange={e => setDurInput(e.target.value.replace(/\D/g, ''))}
                   onFocus={e => e.target.select()}
                   onKeyDown={e => { if (e.key === 'Enter') applyDuration(); if (e.key === 'Escape') setShowSetDuration(false) }}
