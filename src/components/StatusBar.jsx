@@ -31,7 +31,7 @@ export default function StatusBar({ connected, updatedAt, updatedBy, onRefresh, 
         <span className="connection-label">{connected ? 'Live' : 'Offline'}</span>
         {age && (
           <span className="last-updated">
-            <span className="last-updated-line1">· {updatedBy ? 'Last updated by' : 'Last updated'}</span>
+            <span className="last-updated-line1">{updatedBy ? 'Last updated by' : 'Last updated'}</span>
             <span className="last-updated-line2">{updatedBy ? `${updatedBy} ${age}` : age}</span>
           </span>
         )}
