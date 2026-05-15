@@ -24,7 +24,7 @@ function AnimatedScore({ value, extraClass, onClick }) {
   )
 }
 
-const QUARTER_LABELS = ['Q1', 'Q2', 'Q3', 'Q4', 'FINAL', 'HT']
+const QUARTER_LABELS = ['Q1', 'Q2', 'Q3', 'Q4', 'FINAL', 'HALFTIME']
 
 export default function Scoreboard({ seahawksScore, opponentScore, quarter, onSetScore }) {
   const [editing, setEditing] = useState(null) // 'seahawks' | 'opponent' | null
