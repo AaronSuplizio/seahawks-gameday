@@ -3,12 +3,13 @@ import { createPortal } from 'react-dom'
 import { supabase } from '../supabaseClient'
 
 const MOMENTS = [
-  { id: 'touchdown',    label: 'Touchdown!',                  emoji: '🏈', color: '#69BE28', vibrate: [150, 50, 150, 50, 150, 50, 400] },
-  { id: 'interception', label: 'Interception!',               emoji: '🙌', color: '#4a90d9', vibrate: [200, 60, 300] },
-  { id: 'chains',       label: 'First Down, Move the Chains!',emoji: '⛓️', color: '#c0a060', vibrate: [80, 40, 80] },
-  { id: 'defense',      label: 'Defense!',                    emoji: '🛡️', color: '#5b8dd9', vibrate: [100, 30, 100, 30, 100] },
-  { id: 'wth',          label: 'What just happened?',         emoji: '🤮', color: '#9370db', vibrate: [500] },
-  { id: 'fired-up',     label: "Let's get fired up!",         emoji: '🔥', color: '#ff6b35', vibrate: [80, 30, 200, 30, 80] },
+  { id: 'touchdown',    label: 'Seahawks Touchdown!',          emoji: '🏈', color: '#69BE28', vibrate: [150, 50, 150, 50, 150, 50, 400] },
+  { id: 'extra-point',  label: 'Seahawks Extra Point!',        emoji: '🎯', color: '#69BE28', vibrate: [100, 40, 100] },
+  { id: 'interception', label: 'Seahawks Interception!',       emoji: '🙌', color: '#4a90d9', vibrate: [200, 60, 300] },
+  { id: 'chains',       label: 'First Down, Move the Chains!', emoji: '⛓️', color: '#c0a060', vibrate: [80, 40, 80] },
+  { id: 'defense',      label: 'Defense!',                     emoji: '🛡️', color: '#5b8dd9', vibrate: [100, 30, 100, 30, 100] },
+  { id: 'wth',          label: 'What just happened?',          emoji: '🤮', color: '#9370db', vibrate: [500] },
+  { id: 'fired-up',     label: "Let's get fired up!",          emoji: '🔥', color: '#ff6b35', vibrate: [80, 30, 200, 30, 80] },
 ]
 
 const CONFETTI_COLORS = ['#69BE28', '#002244', '#ffffff', '#a8d858', '#001529']
