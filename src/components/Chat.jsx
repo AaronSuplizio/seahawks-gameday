@@ -47,10 +47,12 @@ export default function Chat({ name, isAdmin, onChangeName }) {
   const [sendError, setSendError] = useState(null)
   const [confirmingClear, setConfirmingClear] = useState(false)
   const [activeMsgId, setActiveMsgId] = useState(null)
-  const bottomRef = useRef(null)
+  const listRef = useRef(null)
 
   const scrollToBottom = useCallback(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (listRef.current) {
+      listRef.current.scrollTop = listRef.current.scrollHeight
+    }
   }, [])
 
   useEffect(() => {
@@ -152,7 +154,7 @@ export default function Chat({ name, isAdmin, onChangeName }) {
         </div>
       </div>
 
-      <div className="chat-messages">
+      <div className="chat-messages" ref={listRef}>
         {messages.length === 0 && (
           <p className="chat-empty">No messages yet — say something! 👋</p>
         )}
@@ -181,7 +183,7 @@ export default function Chat({ name, isAdmin, onChangeName }) {
             </div>
           )
         })}
-        <div ref={bottomRef} />
+        <div />
       </div>
 
       {sendError && <div className="chat-error">{sendError}</div>}

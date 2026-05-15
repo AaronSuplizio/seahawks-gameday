@@ -138,10 +138,6 @@ export default function App() {
   }, [game.quarter, chatName, fetchGame, persistAs])
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
-  useEffect(() => {
     fetchGame()
 
     // No row-level filter here — only one row exists, and filters on UPDATE
@@ -245,7 +241,7 @@ export default function App() {
               <QuarterControls quarter={game.quarter} onSetQuarter={setQuarter} />
             </div>
 
-            {confirmingReset ? (
+            {isAdmin && (confirmingReset ? (
               <div className="reset-confirm">
                 <span className="reset-confirm-label">Zero out scores?</span>
                 <button className="btn btn-reset-confirm" onClick={resetGame}>Yes, reset</button>
@@ -255,7 +251,7 @@ export default function App() {
               <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>
                 Reset Score
               </button>
-            )}
+            ))}
 
           </section>
 
