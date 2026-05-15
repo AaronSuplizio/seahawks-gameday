@@ -97,6 +97,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 .status-left {
   display: flex;
@@ -104,6 +105,8 @@ body {
   gap: 6px;
   font-size: 0.78rem;
   color: var(--gray);
+  flex: 1;
+  min-width: 0;
 }
 .connection-dot {
   width: 7px;
@@ -1224,4 +1227,10 @@ body {
   .btn-admin  { padding: 18px 12px; min-height: 68px; }
   .moment-emoji { font-size: 2.2rem; }
   .moment-label { font-size: 0.9rem; }
+}
+
+@media (max-width: 480px) {
+  .btn-status-label { display: none; }
+  .btn-status { padding: 4px 8px; }
+  .last-updated { white-space: normal; }
 }

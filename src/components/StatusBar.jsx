@@ -39,7 +39,7 @@ export default function StatusBar({ connected, updatedAt, updatedBy, onRefresh, 
       </div>
       <div className="status-right">
         <button className="btn-status btn-status-left" onClick={() => window.location.reload()}>
-          ↻ Refresh App
+          ↻ <span className="btn-status-label">Refresh App</span>
         </button>
         <button className="btn-status btn-status-right" onClick={onShare}>
           {shareCopied ? 'Copied!' : (
@@ -49,7 +49,7 @@ export default function StatusBar({ connected, updatedAt, updatedBy, onRefresh, 
                 <polyline points="16 6 12 2 8 6"/>
                 <line x1="12" y1="2" x2="12" y2="15"/>
               </svg>
-              Share App
+              <span className="btn-status-label">Share App</span>
             </>
           )}
         </button>
