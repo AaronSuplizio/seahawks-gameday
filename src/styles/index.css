@@ -834,6 +834,16 @@ body {
   margin-top: -4px;
 }
 
+@keyframes oBoom {
+  0%   { transform: scale(1);    opacity: 0.4; }
+  40%  { transform: scale(1.55); opacity: 1; }
+  70%  { transform: scale(0.92); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+.moment-ripple-o {
+  display: inline-block;
+  animation: oBoom 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
 .moment-overlay-text {
   font-family: var(--font-display);
   font-size: clamp(1.3rem, 6vw, 2.4rem);

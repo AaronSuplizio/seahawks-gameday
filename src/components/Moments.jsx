@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import { createPortal } from 'react-dom'
 import { supabase } from '../supabaseClient'
 
@@ -11,6 +11,7 @@ const MOMENTS = [
   { id: 'wth',          label: 'What just happened?',          emoji: '🤮', color: '#9370db', vibrate: [500] },
   { id: 'flag',         label: 'Nice Pull!',                   emoji: '🚩', color: '#e04040', vibrate: [60, 30, 60] },
   { id: 'fired-up',     label: "Let's get fired up!",          emoji: '🔥', color: '#ff6b35', vibrate: [80, 30, 200, 30, 80] },
+  { id: 'gooo',         label: 'Goooooooo Seahawks!',          emoji: '🦅', color: '#69BE28', vibrate: [100, 30, 100, 30, 100, 30, 100, 30, 400] },
 ]
 
 const CONFETTI_COLORS = ['#69BE28', '#002244', '#ffffff', '#a8d858', '#001529']
@@ -72,10 +73,27 @@ function launchConfetti() {
   return () => { cancelAnimationFrame(frame); canvas.remove() }
 }
 
-export default function Moments({ name }) {
+function RippleText({ label }) {
+  const match = label.match(/^(G)(o+)(.*)$/i)
+  if (!match) return <>{label}</>
+  const [, g, os, rest] = match
+  return (
+    <>
+      {g}
+      {os.split('').map((o, i) => (
+        <span key={i} className="moment-ripple-o" style={{ animationDelay: `${i * 0.09}s` }}>{o}</span>
+      ))}
+      {rest}
+    </>
+  )
+}
+
+const Moments = forwardRef(function Moments({ name }, ref) {
   const [active, setActive] = useState(null)
   const channelRef = useRef(null)
   const timerRef = useRef(null)
+  const nameRef = useRef(name)
+  useEffect(() => { nameRef.current = name }, [name])
 
   function showMoment(moment, from = null) {
     if (timerRef.current) clearTimeout(timerRef.current)
@@ -86,9 +104,16 @@ export default function Moments({ name }) {
   }
 
   function fireMoment(moment) {
-    showMoment(moment, name)
-    channelRef.current?.send({ type: 'broadcast', event: 'moment', payload: { id: moment.id, from: name } })
+    showMoment(moment, nameRef.current)
+    channelRef.current?.send({ type: 'broadcast', event: 'moment', payload: { id: moment.id, from: nameRef.current } })
   }
+
+  useImperativeHandle(ref, () => ({
+    fireById: (id) => {
+      const moment = MOMENTS.find(m => m.id === id)
+      if (moment) fireMoment(moment)
+    }
+  }))
 
   useEffect(() => {
     channelRef.current = supabase
@@ -135,7 +160,9 @@ export default function Moments({ name }) {
         >
           <div className="moment-overlay-content">
             <div className="moment-overlay-emoji">{active.emoji}</div>
-            <div className="moment-overlay-text">{active.label}</div>
+            <div className="moment-overlay-text">
+              {active.id === 'gooo' ? <RippleText label={active.label} /> : active.label}
+            </div>
             {active.from && <div className="moment-overlay-from">From {active.from}</div>}
           </div>
         </div>,
@@ -143,4 +170,6 @@ export default function Moments({ name }) {
       )}
     </>
   )
-}
+})
+
+export default Moments

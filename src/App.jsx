@@ -26,6 +26,7 @@ export default function App() {
   const [chatName, setChatName] = useState(() => localStorage.getItem('chat_name'))
   const [isAdmin, setIsAdmin] = useState(() => localStorage.getItem('admin_unlocked') === '1')
   const [shareCopied, setShareCopied] = useState(false)
+  const momentsRef = useRef(null)
 
   async function shareApp() {
     const url = window.location.href
@@ -118,6 +119,7 @@ export default function App() {
     persistAs(patch).then(err => {
       if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() }
     })
+    if (team === 'seahawks' && delta === 6) momentsRef.current?.fireById('touchdown')
   }, [game, chatName, fetchGame, persistAs])
 
   const setQuarter = useCallback((q) => {
@@ -279,7 +281,7 @@ export default function App() {
             </section>
           )}
 
-          <Moments name={chatName} />
+          <Moments name={chatName} ref={momentsRef} />
         </div>
 
         <div className="main-right">
