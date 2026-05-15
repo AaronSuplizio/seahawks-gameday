@@ -130,12 +130,19 @@ export default function App() {
   }, [game, chatName, fetchGame, persistAs])
 
   const resetGame = useCallback(async () => {
-    const patch = { seahawks_score: 0, opponent_score: 0, quarter: game.quarter }
+    const patch = { seahawks_score: 0, opponent_score: 0, quarter: 1 }
     setConfirmingReset(false)
     setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
     const error = await persistAs(patch)
     if (error) { setDbError(`Reset failed: ${error.message}`); fetchGame() }
-  }, [game.quarter, chatName, fetchGame, persistAs])
+  }, [chatName, fetchGame, persistAs])
+
+  const setGameFinal = useCallback(async () => {
+    const patch = { quarter: 5, timer_running: false, timer_end_at: null, timer_paused_remaining: 0 }
+    setGame(prev => ({ ...prev, ...patch, updated_at: new Date().toISOString(), updated_by: chatName }))
+    const error = await persistAs(patch)
+    if (error) { setDbError(`Save failed: ${error.message}`); fetchGame() }
+  }, [chatName, fetchGame, persistAs])
 
   useEffect(() => {
     fetchGame()
@@ -242,17 +249,21 @@ export default function App() {
                 <QuarterControls quarter={game.quarter} onSetQuarter={setQuarter} />
               </div>
 
-              {confirmingReset ? (
-                <div className="reset-confirm">
-                  <span className="reset-confirm-label">Zero out scores?</span>
-                  <button className="btn btn-reset-confirm" onClick={resetGame}>Yes, reset</button>
-                  <button className="btn btn-reset-cancel" onClick={() => setConfirmingReset(false)}>Cancel</button>
+              <div className="admin-actions-box">
+                <div className="admin-actions-label">ADMIN</div>
+                <div className="admin-actions-row">
+                  {confirmingReset ? (
+                    <div className="reset-confirm">
+                      <span className="reset-confirm-label">Zero out scores?</span>
+                      <button className="btn btn-reset-confirm" onClick={resetGame}>Yes, reset</button>
+                      <button className="btn btn-reset-cancel" onClick={() => setConfirmingReset(false)}>Cancel</button>
+                    </div>
+                  ) : (
+                    <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>Reset Score</button>
+                  )}
+                  <button className="btn btn-final" onClick={setGameFinal}>Final Score</button>
                 </div>
-              ) : (
-                <button className="btn btn-reset" onClick={() => setConfirmingReset(true)}>
-                  Reset Score
-                </button>
-              )}
+              </div>
             </section>
           )}
 

@@ -24,7 +24,7 @@ function AnimatedScore({ value, extraClass, onClick }) {
   )
 }
 
-const QUARTER_LABELS = ['Q1', 'Q2', 'Q3', 'Q4']
+const QUARTER_LABELS = ['Q1', 'Q2', 'Q3', 'Q4', 'FINAL']
 
 export default function Scoreboard({ seahawksScore, opponentScore, quarter, onSetScore }) {
   const [editing, setEditing] = useState(null) // 'seahawks' | 'opponent' | null
@@ -64,7 +64,7 @@ export default function Scoreboard({ seahawksScore, opponentScore, quarter, onSe
           </div>
 
           <div className="scoreboard-center">
-            <div className="quarter-badge">{QUARTER_LABELS[quarter - 1] ?? `Q${quarter}`}</div>
+            <div className={`quarter-badge${quarter === 5 ? ' quarter-badge-final' : ''}`}>{QUARTER_LABELS[quarter - 1] ?? `Q${quarter}`}</div>
             <div className="score-colon">:</div>
           </div>
 
