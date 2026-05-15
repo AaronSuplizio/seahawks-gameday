@@ -1,6 +1,6 @@
 {
-  "name": "Seahawks Gameday",
-  "short_name": "Seahawks",
+  "name": "Seahawks Sideline",
+  "short_name": "Seahawks Sideline",
   "description": "Real-time flag football scoreboard",
   "start_url": "/",
   "display": "standalone",
