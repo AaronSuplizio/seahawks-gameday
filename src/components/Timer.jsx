@@ -77,10 +77,9 @@ export default function Timer({ game, isAdmin }) {
     if (clockInvalid) return
     const total = minVal * 60 + secVal
     await patchTimer({
-      timer_seconds: total,
       timer_running: false,
       timer_end_at: null,
-      timer_paused_remaining: null,
+      timer_paused_remaining: total,
     })
     setShowSetClock(false)
   }
