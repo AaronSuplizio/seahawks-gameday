@@ -1121,7 +1121,7 @@ body {
   word-break: break-word;
 }
 .chat-msg-mine .chat-msg-bubble {
-  background: var(--green);
+  background: #3a7a10;
   color: #ffffff;
   border-radius: 12px 12px 3px 12px;
 }
