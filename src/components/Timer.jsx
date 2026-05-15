@@ -136,11 +136,12 @@ export default function Timer({ game, isAdmin }) {
                 <input
                   ref={minRef}
                   className="timer-set-input"
-                  type="number"
-                  min="0"
-                  max="99"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={2}
                   value={minInput}
-                  onChange={e => setMinInput(e.target.value)}
+                  onChange={e => setMinInput(e.target.value.replace(/\D/g, ''))}
                   onFocus={e => e.target.select()}
                   onKeyDown={e => { if (e.key === 'Enter') applyClock(); if (e.key === 'Escape') closeSetClock() }}
                 />
@@ -150,11 +151,12 @@ export default function Timer({ game, isAdmin }) {
               <div className="timer-set-col">
                 <input
                   className="timer-set-input"
-                  type="number"
-                  min="0"
-                  max="59"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={2}
                   value={secInput}
-                  onChange={e => setSecInput(e.target.value)}
+                  onChange={e => setSecInput(e.target.value.replace(/\D/g, ''))}
                   onFocus={e => e.target.select()}
                   onKeyDown={e => { if (e.key === 'Enter') applyClock(); if (e.key === 'Escape') closeSetClock() }}
                 />
