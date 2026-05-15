@@ -333,15 +333,19 @@ body {
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  padding: 12px 8px;
-  border-radius: 8px;
+  padding: 14px 8px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
-  background: var(--gray-dim);
+  background: var(--navy-card);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: background 0.1s, opacity 0.1s;
   white-space: nowrap;
   text-align: center;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .btn-admin:disabled { opacity: 0.3; cursor: default; }
 .btn-admin:not(:disabled):hover { background: rgba(255,255,255,0.11); }
@@ -613,9 +617,10 @@ body {
 
 /* Reset */
 .admin-actions-box {
+  width: 100%;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 10px 10px 10px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1187,6 +1192,7 @@ body {
   /* Shift overlay center to match left panel center (340px chat offset) */
   .moment-overlay { padding-right: 340px; }
   .btn-moment { padding: 18px 12px; }
+  .btn-admin  { padding: 18px 12px; min-height: 68px; }
   .moment-emoji { font-size: 2.2rem; }
   .moment-label { font-size: 0.9rem; }
 }
