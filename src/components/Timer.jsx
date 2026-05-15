@@ -147,11 +147,16 @@ export default function Timer({ game, isAdmin }) {
               <button className="btn-timer-secondary" onClick={openSetClock}>✎ Set Clock</button>
             )}
           </div>
-          <button className="btn-timer-duration" onClick={openSetDuration}>
-            {quarterMins} Min Quarters
-          </button>
         </div>
       )}
+
+      <button
+        className="btn-timer-duration"
+        onClick={isAdmin ? openSetDuration : undefined}
+        style={!isAdmin ? { cursor: 'default', pointerEvents: 'none' } : undefined}
+      >
+        {quarterMins} Min Quarters
+      </button>
 
       {/* Set Clock modal — MM:SS */}
       {showSetClock && (

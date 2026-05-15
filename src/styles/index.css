@@ -338,10 +338,11 @@ body {
 }
 .btn-timer-main:disabled { opacity: 0.35; cursor: default; }
 .btn-timer-start {
-  background: var(--green);
-  color: var(--navy);
+  background: var(--gray-dim);
+  color: var(--white);
+  border: 1px solid var(--border);
 }
-.btn-timer-start:hover { filter: brightness(1.08); }
+.btn-timer-start:hover { background: rgba(255,255,255,0.12); filter: none; }
 .btn-timer-pause {
   background: var(--gray-dim);
   color: var(--white);
