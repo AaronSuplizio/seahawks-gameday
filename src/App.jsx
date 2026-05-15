@@ -6,8 +6,9 @@ import QuarterControls from './components/QuarterControls'
 import StatusBar from './components/StatusBar'
 import Chat, { JoinPrompt } from './components/Chat'
 import Moments from './components/Moments'
+import Timer from './components/Timer'
 
-const DEFAULT_GAME = { id: 1, seahawks_score: 0, opponent_score: 0, quarter: 1, updated_at: null }
+const DEFAULT_GAME = { id: 1, seahawks_score: 0, opponent_score: 0, quarter: 1, updated_at: null, timer_seconds: 600, timer_running: false, timer_end_at: null, timer_paused_remaining: null }
 
 async function persist(patch, updatedBy = null) {
   const { error } = await supabase
@@ -219,6 +220,8 @@ export default function App() {
               persistAs(patch).then(err => { if (err) { setDbError(`Save failed: ${err.message}`); fetchGame() } })
             }}
           />
+
+          <Timer game={game} isAdmin={isAdmin} />
 
           <section className="controls-section">
             <div className="team-cards">

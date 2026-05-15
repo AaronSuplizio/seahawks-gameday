@@ -273,6 +273,86 @@ body {
   cursor: pointer;
 }
 
+/* ── Timer ───────────────────────────────────────────────────────── */
+.timer-section {
+  background: var(--dark);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.timer-label {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+.timer-display {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 11vw, 4rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--gray);
+  transition: color 0.3s;
+}
+.timer-running { color: var(--green); }
+.timer-expired { color: var(--red); }
+
+.timer-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btn-timer {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--gray-dim);
+  color: var(--white);
+  letter-spacing: 0.04em;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.1s;
+}
+.btn-timer:hover { background: rgba(255,255,255,0.12); }
+.btn-timer:disabled { opacity: 0.35; cursor: default; }
+.btn-timer-primary {
+  background: rgba(105,190,40,0.12);
+  border-color: rgba(105,190,40,0.4);
+  color: var(--green);
+}
+.btn-timer-primary:hover { background: rgba(105,190,40,0.22); }
+.btn-timer-config { color: var(--gray); font-size: 0.74rem; }
+.timer-duration-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.timer-duration-input {
+  width: 50px;
+  background: var(--gray-dim);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  padding: 5px 8px;
+  outline: none;
+  text-align: center;
+}
+.timer-duration-input:focus { border-color: var(--green); }
+.timer-duration-unit { font-size: 0.75rem; color: var(--gray); }
+
 /* ── Controls section ────────────────────────────────────────────── */
 .controls-section {
   display: flex;
